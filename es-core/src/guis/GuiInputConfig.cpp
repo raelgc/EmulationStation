@@ -1,4 +1,5 @@
 #include "guis/GuiInputConfig.h"
+#include "guis/GuiMsgBox.h"
 #include "Window.h"
 #include "Log.h"
 #include "components/TextComponent.h"
@@ -11,118 +12,122 @@
 // static const char* inputName[inputCount] = { "Up", "Down", "Left", "Right", "A", "B", "Start", "Select", "PageUp", "PageDown" };
 // static const bool inputSkippable[inputCount] = { false, false, false, false, false, false, false, false, true, true };
 // static const char* inputDispName[inputCount] = { "UP", "DOWN", "LEFT", "RIGHT", "A", "B", "START", "SELECT", "PAGE UP", "PAGE DOWN" };
-// static const char* inputIcon[inputCount] = { ":/help/dpad_up.svg", ":/help/dpad_down.svg", ":/help/dpad_left.svg", ":/help/dpad_right.svg", 
-// 											":/help/button_a.svg", ":/help/button_b.svg", ":/help/button_start.svg", ":/help/button_select.svg", 
+// static const char* inputIcon[inputCount] = { ":/help/dpad_up.svg", ":/help/dpad_down.svg", ":/help/dpad_left.svg", ":/help/dpad_right.svg",
+// 											":/help/button_a.svg", ":/help/button_b.svg", ":/help/button_start.svg", ":/help/button_select.svg",
 // 											":/help/button_l.svg", ":/help/button_r.svg" };
 
-static const int inputCount = 24;
+static const int inputCount = 25;
 static const char* inputName[inputCount] =
 {
-    "Up",
-    "Down",
-    "Left",
-    "Right",
-    "Start",
-    "Select",
-    "A",
-    "B",
-    "X",
-    "Y",
-    "LeftShoulder",
-    "RightShoulder",
-    "LeftTrigger",
-    "RightTrigger",
-    "LeftThumb",
-    "RightThumb",
-    "LeftAnalogUp",
-    "LeftAnalogDown",
-    "LeftAnalogLeft",
-    "LeftAnalogRight",
-    "RightAnalogUp",
-    "RightAnalogDown",
-    "RightAnalogLeft",
-    "RightAnalogRight"
+	"Up",
+	"Down",
+	"Left",
+	"Right",
+	"Start",
+	"Select",
+	"A",
+	"B",
+	"X",
+	"Y",
+	"LeftShoulder",
+	"RightShoulder",
+	"LeftTrigger",
+	"RightTrigger",
+	"LeftThumb",
+	"RightThumb",
+	"LeftAnalogUp",
+	"LeftAnalogDown",
+	"LeftAnalogLeft",
+	"LeftAnalogRight",
+	"RightAnalogUp",
+	"RightAnalogDown",
+	"RightAnalogLeft",
+	"RightAnalogRight",
+	"HotKeyEnable"
 };
 static const bool inputSkippable[inputCount] =
 {
-    false,
-    false,
-    false,
-    false,
-    true,
-    true,
-    false,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true
+	false,
+	false,
+	false,
+	false,
+	true,
+	true,
+	false,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true,
+	true
 };
 static const char* inputDispName[inputCount] =
 {
-    "D-PAD UP",
-    "D-PAD DOWN",
-    "D-PAD LEFT",
-    "D-PAD RIGHT",
-    "START",
-    "SELECT",
-    "A",
-    "B",
-    "X",
-    "Y",
-    "LEFT SHOULDER",
-    "RIGHT SHOULDER",
-    "LEFT TRIGGER",
-    "RIGHT TRIGGER",
-    "LEFT THUMB",
-    "RIGHT THUMB",
-    "LEFT ANALOG UP",
-    "LEFT ANALOG DOWN",
-    "LEFT ANALOG LEFT",
-    "LEFT ANALOG RIGHT",
-    "RIGHT ANALOG UP",
-    "RIGHT ANALOG DOWN",
-    "RIGHT ANALOG LEFT",
-    "RIGHT ANALOG RIGHT"
+	"D-PAD UP",
+	"D-PAD DOWN",
+	"D-PAD LEFT",
+	"D-PAD RIGHT",
+	"START",
+	"SELECT",
+	"A",
+	"B",
+	"X",
+	"Y",
+	"LEFT SHOULDER",
+	"RIGHT SHOULDER",
+	"LEFT TRIGGER",
+	"RIGHT TRIGGER",
+	"LEFT THUMB",
+	"RIGHT THUMB",
+	"LEFT ANALOG UP",
+	"LEFT ANALOG DOWN",
+	"LEFT ANALOG LEFT",
+	"LEFT ANALOG RIGHT",
+	"RIGHT ANALOG UP",
+	"RIGHT ANALOG DOWN",
+	"RIGHT ANALOG LEFT",
+	"RIGHT ANALOG RIGHT",
+	"HOTKEY ENABLE"
 };
 static const char* inputIcon[inputCount] =
 {
-    ":/help/dpad_up.svg",
-    ":/help/dpad_down.svg",
-    ":/help/dpad_left.svg",
-    ":/help/dpad_right.svg",
-    ":/help/button_start.svg",
-    ":/help/button_select.svg",
-    ":/help/button_a.svg",
-    ":/help/button_b.svg",
-    ":/help/button_x.svg",
-    ":/help/button_y.svg",
-    ":/help/button_l.svg",
-    ":/help/button_r.svg",
-    ":/help/button_l.svg",
-    ":/help/button_r.svg",
-    ":/help/analog_thumb.svg",
-    ":/help/analog_thumb.svg",
-    ":/help/analog_up.svg",
-    ":/help/analog_down.svg",
-    ":/help/analog_left.svg",
-    ":/help/analog_right.svg",
-    ":/help/analog_up.svg",
-    ":/help/analog_down.svg",
-    ":/help/analog_left.svg",
-    ":/help/analog_right.svg"
+	":/help/dpad_up.svg",
+	":/help/dpad_down.svg",
+	":/help/dpad_left.svg",
+	":/help/dpad_right.svg",
+	":/help/button_start.svg",
+	":/help/button_select.svg",
+	":/help/button_a.svg",
+	":/help/button_b.svg",
+	":/help/button_x.svg",
+	":/help/button_y.svg",
+	":/help/button_l.svg",
+	":/help/button_r.svg",
+	":/help/button_l.svg",
+	":/help/button_r.svg",
+	":/help/analog_thumb.svg",
+	":/help/analog_thumb.svg",
+	":/help/analog_up.svg",
+	":/help/analog_down.svg",
+	":/help/analog_left.svg",
+	":/help/analog_right.svg",
+	":/help/analog_up.svg",
+	":/help/analog_down.svg",
+	":/help/analog_left.svg",
+	":/help/analog_right.svg",
+	":/help/button_hotkey.svg"
 };
 
 //MasterVolUp and MasterVolDown are also hooked up, but do not appear on this screen.
@@ -132,8 +137,8 @@ using namespace Eigen;
 
 #define HOLD_TO_SKIP_MS 1000
 
-GuiInputConfig::GuiInputConfig(Window* window, InputConfig* target, bool reconfigureAll, const std::function<void()>& okCallback) : GuiComponent(window), 
-	mBackground(window, ":/frame.png"), mGrid(window, Vector2i(1, 7)), 
+GuiInputConfig::GuiInputConfig(Window* window, InputConfig* target, bool reconfigureAll, const std::function<void()>& okCallback) : GuiComponent(window),
+	mBackground(window, ":/frame.png"), mGrid(window, Vector2i(1, 7)),
 	mTargetConfig(target), mHoldingInput(false), mBusyAnim(window)
 {
 	LOG(LogInfo) << "Configuring device " << target->getDeviceId() << " (" << target->getDeviceName() << ").";
@@ -152,7 +157,7 @@ GuiInputConfig::GuiInputConfig(Window* window, InputConfig* target, bool reconfi
 
 	mTitle = std::make_shared<TextComponent>(mWindow, "CONFIGURING", Font::get(FONT_SIZE_LARGE), 0x555555FF, ALIGN_CENTER);
 	mGrid.setEntry(mTitle, Vector2i(0, 1), false, true);
-	
+
 	std::stringstream ss;
 	if(target->getDeviceId() == DEVICE_KEYBOARD)
 		ss << "KEYBOARD";
@@ -171,7 +176,7 @@ GuiInputConfig::GuiInputConfig(Window* window, InputConfig* target, bool reconfi
 	for(int i = 0; i < inputCount; i++)
 	{
 		ComponentListRow row;
-		
+
 		// icon
 		auto icon = std::make_shared<ImageComponent>(mWindow);
 		icon->setImage(inputIcon[i]);
@@ -208,7 +213,7 @@ GuiInputConfig::GuiInputConfig(Window* window, InputConfig* target, bool reconfi
 					setPress(mapping);
 					return true;
 				}
-				
+
 				// we're not configuring and they didn't press A to start, so ignore this
 				return false;
 			}
@@ -257,11 +262,34 @@ GuiInputConfig::GuiInputConfig(Window* window, InputConfig* target, bool reconfi
 
 	// buttons
 	std::vector< std::shared_ptr<ButtonComponent> > buttons;
-	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "OK", "ok", [this, okCallback] { 
+	std::function<void()> okFunction = [this, okCallback] {
 		InputManager::getInstance()->writeDeviceConfig(mTargetConfig); // save
 		if(okCallback)
 			okCallback();
-		delete this; 
+		delete this;
+	};
+	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "OK", "ok", [this, okFunction] {
+		// check if the hotkey enable button is set. if not prompt the user to use select or nothing.
+		Input input;
+		if (!mTargetConfig->getInputByName("HotKeyEnable", &input)) {
+			mWindow->pushGui(new GuiMsgBox(mWindow,
+				"YOU DIDN'T CHOOSE A HOTKEY ENABLE BUTTON. THIS IS REQUIRED FOR EXITING GAMES WITH A CONTROLLER. DO YOU WANT TO USE THE SELECT BUTTON DEFAULT ? PLEASE ANSWER YES TO USE SELECT OR NO TO NOT SET A HOTKEY ENABLE BUTTON.",
+				"YES", [this, okFunction] {
+					Input input;
+					mTargetConfig->getInputByName("Select", &input);
+					mTargetConfig->mapInput("HotKeyEnable", input);
+					okFunction();
+					},
+				"NO", [this, okFunction] {
+					// for a disabled hotkey enable button, set to a key with id 0,
+					// so the input configuration script can be backwards compatible.
+					mTargetConfig->mapInput("HotKeyEnable", Input(DEVICE_KEYBOARD, TYPE_KEY, 0, 1, true));
+					okFunction();
+				}
+			));
+		} else {
+			okFunction();
+		}
 	}));
 	mButtonGrid = makeButtonGrid(mWindow, buttons);
 	mGrid.setEntry(mButtonGrid, Vector2i(0, 6), true, false);
@@ -316,7 +344,7 @@ void GuiInputConfig::update(int deltaTime)
 	}
 }
 
-// move cursor to the next thing if we're configuring all, 
+// move cursor to the next thing if we're configuring all,
 // or come out of "configure mode" if we were only configuring one row
 void GuiInputConfig::rowDone()
 {
@@ -368,14 +396,14 @@ bool GuiInputConfig::assign(Input input, int inputId)
 
 	// if this input is mapped to something other than "nothing" or the current row, error
 	// (if it's the same as what it was before, allow it)
-	if(mTargetConfig->getMappedTo(input).size() > 0 && !mTargetConfig->isMappedTo(inputName[inputId], input))
+	if(mTargetConfig->getMappedTo(input).size() > 0 && !mTargetConfig->isMappedTo(inputName[inputId], input) && inputName[inputId] != "HotKeyEnable")
 	{
 		error(mMappings.at(inputId), "Already mapped!");
 		return false;
 	}
 
 	setAssignedTo(mMappings.at(inputId), input);
-	
+
 	input.configured = true;
 	mTargetConfig->mapInput(inputName[inputId], input);
 
