@@ -8,6 +8,7 @@
 #include <string>
 #include <boost/filesystem.hpp>
 #include <boost/variant.hpp>
+#include <boost/xpressive/xpressive.hpp>
 #include <Eigen/Dense>
 #include "pugixml/pugixml.hpp"
 #include "GuiComponent.h"
@@ -110,7 +111,7 @@ public:
 	ThemeData();
 
 	// throws ThemeException
-	void loadFile(const std::string& path);
+	void loadFile(std::map<std::string, std::string> sysDataMap, const std::string& path);
 
 	enum ElementPropertyType
 	{
@@ -141,6 +142,7 @@ private:
 	float mVersion;
 
 	void parseIncludes(const pugi::xml_node& themeRoot);
+	void parseVariables(const pugi::xml_node& root);
 	void parseViews(const pugi::xml_node& themeRoot);
 	void parseView(const pugi::xml_node& viewNode, ThemeView& view);
 	void parseElement(const pugi::xml_node& elementNode, const std::map<std::string, ElementPropertyType>& typeMap, ThemeElement& element);
