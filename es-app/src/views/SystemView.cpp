@@ -230,7 +230,8 @@ void SystemView::onCursorChanged(const CursorState& state)
 		return;
 
 	Animation* anim;
-	if(Settings::getInstance()->getString("TransitionStyle") == "fade")
+	std::string transition_style = Settings::getInstance()->getString("TransitionStyle");
+	if(transition_style == "fade")
 	{
 		float startExtrasFade = mExtrasFadeOpacity;
 		anim = new LambdaAnimation(
@@ -257,7 +258,7 @@ void SystemView::onCursorChanged(const CursorState& state)
 				this->mExtrasCamOffset = endPos;
 
 		}, 500);
-	} else if (Settings::getInstance()->getString("TransitionStyle") == "slide") {
+	} else if (transition_style == "slide") {
 		// slide
 		anim = new LambdaAnimation(
 			[this, startPos, endPos, posMax](float t)
@@ -271,6 +272,21 @@ void SystemView::onCursorChanged(const CursorState& state)
 
 			this->mCamOffset = f;
 			this->mExtrasCamOffset = f;
+		}, 500);
+	} else if (transition_style == "instant") {
+		// instant
+		anim = new LambdaAnimation(
+			[this, startPos, endPos, posMax](float t)
+		{
+			t -= 1;
+			float f = lerp<float>(startPos, endPos, t*t*t + 1);
+			if(f < 0)
+				f += posMax;
+			if(f >= posMax)
+				f -= posMax;
+
+			this->mCamOffset = f;
+			this->mExtrasCamOffset = endPos;
 		}, 500);
 	} else {
 		// None
