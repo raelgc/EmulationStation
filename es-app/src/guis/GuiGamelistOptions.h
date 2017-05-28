@@ -13,6 +13,7 @@ public:
 
 	virtual bool input(InputConfig* config, Input input) override;
 	virtual std::vector<HelpPrompt> getHelpPrompts() override;
+	virtual HelpStyle getHelpStyle() override;
 
 private:
 	void openMetaDataEd();
