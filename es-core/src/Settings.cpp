@@ -74,6 +74,14 @@ void Settings::setDefaults()
 	mStringMap["ThemeSet"] = "";
 	mStringMap["ScreenSaverBehavior"] = "dim";
 	mStringMap["Scraper"] = "TheGamesDB";
+
+	// Audio out device for volume control
+	#ifdef _RPI_
+		mStringMap["AudioDevice"] = "PCM";
+	#else
+		mStringMap["AudioDevice"] = "Master";
+	#endif
+
 }
 
 template <typename K, typename V>
