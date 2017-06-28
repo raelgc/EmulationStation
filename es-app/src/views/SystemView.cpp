@@ -230,12 +230,13 @@ void SystemView::onCursorChanged(const CursorState& state)
 		return;
 
 	Animation* anim;
+	bool move_carousel = Settings::getInstance()->getBool("MoveCarousel");
 	std::string transition_style = Settings::getInstance()->getString("TransitionStyle");
 	if(transition_style == "fade")
 	{
 		float startExtrasFade = mExtrasFadeOpacity;
 		anim = new LambdaAnimation(
-			[startExtrasFade, startPos, endPos, posMax, this](float t)
+			[this, startExtrasFade, startPos, endPos, posMax, move_carousel](float t)
 		{
 			t -= 1;
 			float f = lerp<float>(startPos, endPos, t*t*t + 1);
@@ -244,7 +245,7 @@ void SystemView::onCursorChanged(const CursorState& state)
 			if(f >= posMax)
 				f -= posMax;
 
-			this->mCamOffset = f;
+			this->mCamOffset = move_carousel ? f : endPos;
 
 			t += 1;
 			if(t < 0.3f)
@@ -261,7 +262,7 @@ void SystemView::onCursorChanged(const CursorState& state)
 	} else if (transition_style == "slide") {
 		// slide
 		anim = new LambdaAnimation(
-			[this, startPos, endPos, posMax](float t)
+			[this, startPos, endPos, posMax, move_carousel](float t)
 		{
 			t -= 1;
 			float f = lerp<float>(startPos, endPos, t*t*t + 1);
@@ -270,32 +271,24 @@ void SystemView::onCursorChanged(const CursorState& state)
 			if(f >= posMax)
 				f -= posMax;
 
-			this->mCamOffset = f;
+			this->mCamOffset = move_carousel ? f : endPos;
 			this->mExtrasCamOffset = f;
-		}, 500);
-	} else if (transition_style == "simple slide") {
-		// simple slide
-		anim = new LambdaAnimation(
-			[this, startPos, endPos, posMax](float t)
-		{
-			t -= 1;
-			float f = lerp<float>(startPos, endPos, t*t*t + 1);
-			if(f < 0)
-				f += posMax;
-			if(f >= posMax)
-				f -= posMax;
-
-			this->mCamOffset = f;
-			this->mExtrasCamOffset = endPos;
 		}, 500);
 	} else {
 		// instant
 		anim = new LambdaAnimation(
-			[this, endPos](float t)
+			[this, startPos, endPos, posMax, move_carousel ](float t)
 		{
-			this->mCamOffset = endPos;
+			t -= 1;
+			float f = lerp<float>(startPos, endPos, t*t*t + 1);
+			if(f < 0)
+				f += posMax;
+			if(f >= posMax)
+				f -= posMax;
+
+			this->mCamOffset = move_carousel ? f : endPos;
 			this->mExtrasCamOffset = endPos;
-		}, 1);
+		}, move_carousel ? 500 : 1);
 	}
 
 
