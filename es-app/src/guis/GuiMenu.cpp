@@ -71,6 +71,12 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 		[this] {
 			auto s = new GuiSettings(mWindow, "SOUND SETTINGS");
 
+			// volume
+			auto volume = std::make_shared<SliderComponent>(mWindow, 0.f, 100.f, 1.f, "%");
+			volume->setValue((float)VolumeControl::getInstance()->getVolume());
+			s->addWithLabel("SYSTEM VOLUME", volume);
+			s->addSaveFunc([volume] { VolumeControl::getInstance()->setVolume((int)round(volume->getValue())); });
+
 			#ifdef _RPI_
 				// volume control device
 				auto vol_dev = std::make_shared< OptionListComponent<std::string> >(mWindow, "AUDIO DEVICE", false);
@@ -87,12 +93,6 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 					VolumeControl::getInstance()->init();
 				});
 			#endif
-
-			// volume
-			auto volume = std::make_shared<SliderComponent>(mWindow, 0.f, 100.f, 1.f, "%");
-			volume->setValue((float)VolumeControl::getInstance()->getVolume());
-			s->addWithLabel("SYSTEM VOLUME", volume);
-			s->addSaveFunc([volume] { VolumeControl::getInstance()->setVolume((int)round(volume->getValue())); });
 
 			// disable sounds
 			auto sounds_enabled = std::make_shared<SwitchComponent>(mWindow);
