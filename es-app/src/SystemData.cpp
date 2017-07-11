@@ -17,7 +17,7 @@ std::vector<SystemData*> SystemData::sSystemVector;
 
 namespace fs = boost::filesystem;
 
-SystemData::SystemData(const std::string& name, const std::string& fullName, const std::string& startPath, const std::vector<std::string>& extensions, 
+SystemData::SystemData(const std::string& name, const std::string& fullName, const std::string& startPath, const std::vector<std::string>& extensions,
 	const std::string& command, const std::vector<PlatformIds::PlatformId>& platformIds, const std::string& themeFolder)
 {
 	mName = name;
@@ -67,7 +67,7 @@ std::string strreplace(std::string str, const std::string& replace, const std::s
 	size_t pos;
 	while((pos = str.find(replace)) != std::string::npos)
 		str = str.replace(pos, replace.length(), with.c_str(), with.length());
-	
+
 	return str;
 }
 
@@ -179,7 +179,7 @@ void SystemData::populateFolder(FileData* folder)
 		//this is a little complicated because we allow a list of extensions to be defined (delimited with a space)
 		//we first get the extension of the file itself:
 		extension = filePath.extension().string();
-		
+
 		//fyi, folders *can* also match the extension and be added as games - this is mostly just to support higan
 		//see issue #75: https://github.com/Aloshi/EmulationStation/issues/75
 
@@ -280,7 +280,7 @@ bool SystemData::loadConfig()
 		{
 			const char* str = it->c_str();
 			PlatformIds::PlatformId platformId = PlatformIds::getPlatformId(str);
-			
+
 			if(platformId == PlatformIds::PLATFORM_IGNORE)
 			{
 				// when platform is ignore, do not allow other platforms
@@ -454,7 +454,7 @@ void SystemData::loadTheme()
 		sysData.insert(std::pair<std::string, std::string>("system.name", getName()));
 		sysData.insert(std::pair<std::string, std::string>("system.theme", getThemeFolder()));
 		sysData.insert(std::pair<std::string, std::string>("system.fullName", getFullName()));
-		
+
 		mTheme->loadFile(sysData, path);
 	} catch(ThemeException& e)
 	{
