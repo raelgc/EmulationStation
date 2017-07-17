@@ -466,12 +466,18 @@ Can be created as an extra.
 	- The image will be resized as large as possible so that it fits within this size and maintains its aspect ratio.  Use this instead of `size` when you don't know what kind of image you're using so it doesn't get grossly oversized on one axis (e.g. with a game's image metadata).
 * `origin` - type: NORMALIZED_PAIR.
 	- Where on the image `pos` refers to.  For example, an origin of `0.5 0.5` and a `pos` of `0.5 0.5` would place the image exactly in the middle of the screen.  If the "POSITION" and "SIZE" attributes are themable, "ORIGIN" is implied.
+* `rotation` - type: FLOAT.
+	- angle in degrees that the image should be rotated.  Positive values will rotate clockwise, negative values will rotate counterclockwise.
+* `rotationOrigin` - type: NORMALIZED_PAIR.
+	- Point around which the image will be rotated. Defaults to `0.5 0.5`.
 * `path` - type: PATH.
 	- Path to the image file.  Most common extensions are supported (including .jpg, .png, and unanimated .gif).
 * `tile` - type: BOOLEAN.
 	- If true, the image will be tiled instead of stretched to fit its size.  Useful for backgrounds.
 * `color` - type: COLOR.
 	- Multiply each pixel's color by this color. For example, an all-white image with `<color>FF0000</color>` would become completely red.  You can also control the transparency of an image with `<color>FFFFFFAA</color>` - keeping all the pixels their normal color and only affecting the alpha channel.
+* `zIndex` - type: FLOAT.
+	- z-index value for component.  Components will be rendered in order of z-index value from low to high.
 
 #### text
 
@@ -483,6 +489,12 @@ Can be created as an extra.
 	- `0 0` - automatically size so text fits on one line (expanding horizontally).
 	- `w 0` - automatically wrap text so it doesn't go beyond `w` (expanding vertically).
 	- `w h` - works like a "text box."  If `h` is non-zero and `h` <= `fontSize` (implying it should be a single line of text), text that goes beyond `w` will be truncated with an elipses (...).
+* `origin` - type: NORMALIZED_PAIR.
+	- Where on the component `pos` refers to.  For example, an origin of `0.5 0.5` and a `pos` of `0.5 0.5` would place the component exactly in the middle of the screen.  If the "POSITION" and "SIZE" attributes are themable, "ORIGIN" is implied.
+* `rotation` - type: FLOAT.
+	- angle in degrees that the text should be rotated.  Positive values will rotate clockwise, negative values will rotate counterclockwise.
+* `rotationOrigin` - type: NORMALIZED_PAIR.
+	- Point around which the text will be rotated. Defaults to `0.5 0.5`.
 * `text` - type: STRING.
 * `color` - type: COLOR.
 * `backgroundColor` - type: COLOR;
@@ -501,6 +513,8 @@ Can be created as an extra.
 
 * `pos` - type: NORMALIZED_PAIR.
 * `size` - type: NORMALIZED_PAIR.
+* `origin` - type: NORMALIZED_PAIR.
+	- Where on the component `pos` refers to.  For example, an origin of `0.5 0.5` and a `pos` of `0.5 0.5` would place the component exactly in the middle of the screen.  If the "POSITION" and "SIZE" attributes are themable, "ORIGIN" is implied.
 * `selectorColor` - type: COLOR.
 	- Color of the "selector bar."
 * `selectorImagePath` - type: PATH.
@@ -545,6 +559,12 @@ EmulationStation borrows the concept of "nine patches" from Android (or "9-Slice
 * `pos` - type: NORMALIZED_PAIR.
 * `size` - type: NORMALIZED_PAIR.
 	- Only one value is actually used. The other value should be zero.  (e.g. specify width OR height, but not both.  This is done to maintain the aspect ratio.)
+* `origin` - type: NORMALIZED_PAIR.
+	- Where on the component `pos` refers to.  For example, an origin of `0.5 0.5` and a `pos` of `0.5 0.5` would place the component exactly in the middle of the screen.  If the "POSITION" and "SIZE" attributes are themable, "ORIGIN" is implied.
+* `rotation` - type: FLOAT.
+	- angle in degrees that the rating should be rotated.  Positive values will rotate clockwise, negative values will rotate counterclockwise.
+* `rotationOrigin` - type: NORMALIZED_PAIR.
+	- Point around which the rating will be rotated. Defaults to `0.5 0.5`.
 * `filledPath` - type: PATH.
 	- Path to the "filled star" image.  Image must be square (width equals height).
 * `unfilledPath` - type: PATH.

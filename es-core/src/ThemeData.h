@@ -39,7 +39,7 @@ namespace ThemeFlags
 		FORCE_UPPERCASE = 1024,
 		LINE_SPACING = 2048,
 		Z_INDEX = 8192,
-
+		ROTATION = 16384,
 		ALL = 0xFFFFFFFF
 	};
 }
