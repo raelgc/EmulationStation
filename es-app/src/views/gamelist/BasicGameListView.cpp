@@ -72,7 +72,7 @@ void BasicGameListView::setCursor(FileData* cursor)
 				tmp.push(ptr);
 				ptr = ptr->getParent();
 			}
-			
+
 			// flip the stack and put it in mCursorStack
 			mCursorStack = std::stack<FileData*>();
 			while(!tmp.empty())
@@ -121,5 +121,9 @@ std::vector<HelpPrompt> BasicGameListView::getHelpPrompts()
 	prompts.push_back(HelpPrompt("a", "launch"));
 	prompts.push_back(HelpPrompt("b", "back"));
 	prompts.push_back(HelpPrompt("select", "options"));
+	if(mRoot->getSystem()->isGameSystem())
+	{
+		prompts.push_back(HelpPrompt("y", "toggle"));
+	}
 	return prompts;
 }
