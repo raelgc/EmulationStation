@@ -18,6 +18,7 @@
 #include "Settings.h"
 #include <sstream>
 #include <boost/locale.hpp>
+#include <FreeImage.h>
 
 #ifdef WIN32
 #include <Windows.h>
@@ -202,6 +203,11 @@ int main(int argc, char* argv[])
 	}
 #endif
 
+	// call this ONLY when linking with FreeImage as a static library
+#ifdef FREEIMAGE_LIB
+	FreeImage_Initialise();
+#endif
+
 	//if ~/.emulationstation doesn't exist and cannot be created, bail
 	if(!verifyHomeFolderExists())
 		return 1;
@@ -331,6 +337,11 @@ int main(int argc, char* argv[])
 	window.deinit();
 
 	SystemData::deleteSystems();
+
+	// call this ONLY when linking with FreeImage as a static library
+#ifdef FREEIMAGE_LIB
+	FreeImage_DeInitialise();
+#endif
 
 	LOG(LogInfo) << "EmulationStation cleanly shutting down.";
 
