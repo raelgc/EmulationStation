@@ -73,12 +73,32 @@ std::string FileData::getCleanName() const
 	return removeParenthesis(this->getDisplayName());
 }
 
-const std::string& FileData::getThumbnailPath() const
+const std::string FileData::getThumbnailPath() const
 {
-	if(!metadata.get("thumbnail").empty())
-		return metadata.get("thumbnail");
-	else
-		return metadata.get("image");
+	std::string thumbnail = metadata.get("thumbnail");
+
+	// no thumbnail, try image
+	if(thumbnail.empty())
+	{
+		thumbnail = metadata.get("image");
+
+		// no image, try to use local image
+		if(thumbnail.empty())
+		{
+			const char* extList[2] = { ".png", ".jpg" };
+			for(int i = 0; i < 2; i++)
+			{
+				if(thumbnail.empty())
+				{
+					std::string path = mEnvData->mStartPath + "/images/" + getDisplayName() + "-image" + extList[i];
+					if(boost::filesystem::exists(path))
+						thumbnail = path;
+				}
+			}
+		}
+	}
+
+	return thumbnail;
 }
 
 
