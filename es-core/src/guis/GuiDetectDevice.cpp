@@ -9,7 +9,6 @@
 #include <sstream>
 #include "Util.h"
 #include <boost/filesystem.hpp>
-#include <boost/locale.hpp>
 
 #define HOLD_TIME 1000
 
