@@ -1,4 +1,6 @@
 #pragma once
+#ifndef ES_APP_ANIMATIONS_MOVE_CAMERA_ANIMATION_H
+#define ES_APP_ANIMATIONS_MOVE_CAMERA_ANIMATION_H
 
 #include "animations/Animation.h"
 
@@ -22,3 +24,5 @@ private:
 
 	Eigen::Affine3f& cameraOut;
 };
+
+#endif // ES_APP_ANIMATIONS_MOVE_CAMERA_ANIMATION_H

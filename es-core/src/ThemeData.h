@@ -1,4 +1,6 @@
 #pragma once
+#ifndef ES_CORE_THEME_DATA_H
+#define ES_CORE_THEME_DATA_H
 
 #include <iostream>
 #include <sstream>
@@ -149,3 +151,5 @@ private:
 
 	std::map<std::string, ThemeView> mViews;
 };
+
+#endif // ES_CORE_THEME_DATA_H

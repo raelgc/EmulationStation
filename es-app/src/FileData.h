@@ -1,4 +1,6 @@
 #pragma once
+#ifndef ES_APP_FILE_DATA_H
+#define ES_APP_FILE_DATA_H
 
 #include <unordered_map>
 #include <string>
@@ -83,3 +85,5 @@ private:
 	std::unordered_map<std::string,FileData*> mChildrenByFilename;
 	std::vector<FileData*> mChildren;
 };
+
+#endif // ES_APP_FILE_DATA_H

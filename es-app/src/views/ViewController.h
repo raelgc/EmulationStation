@@ -1,4 +1,6 @@
 #pragma once
+#ifndef ES_APP_VIEWS_VIEW_CONTROLLER_H
+#define ES_APP_VIEWS_VIEW_CONTROLLER_H
 
 #include "views/gamelist/IGameListView.h"
 #include "views/SystemView.h"
@@ -85,3 +87,5 @@ private:
 
 	State mState;
 };
+
+#endif // ES_APP_VIEWS_VIEW_CONTROLLER_H

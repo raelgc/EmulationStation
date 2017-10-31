@@ -1,4 +1,6 @@
 #pragma once
+#ifndef ES_CORE_COMPONENTS_COMPONENT_GRID_H
+#define ES_CORE_COMPONENTS_COMPONENT_GRID_H
 
 #include "GuiComponent.h"
 
@@ -117,3 +119,5 @@ private:
 	void onCursorMoved(Eigen::Vector2i from, Eigen::Vector2i to);
 	Eigen::Vector2i mCursor;
 };
+
+#endif // ES_CORE_COMPONENTS_COMPONENT_GRID_H

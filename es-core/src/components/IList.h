@@ -1,4 +1,6 @@
 #pragma once
+#ifndef ES_CORE_COMPONENTS_ILIST_H
+#define ES_CORE_COMPONENTS_ILIST_H
 
 #include <string>
 #include <vector>
@@ -308,3 +310,5 @@ protected:
 	virtual void onCursorChanged(const CursorState& state) {}
 	virtual void onScroll(int amt) {}
 };
+
+#endif // ES_CORE_COMPONENTS_ILIST_H

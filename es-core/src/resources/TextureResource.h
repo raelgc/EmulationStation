@@ -1,4 +1,6 @@
 #pragma once
+#ifndef ES_CORE_RESOURCES_TEXTURE_RESOURCE_H
+#define ES_CORE_RESOURCES_TEXTURE_RESOURCE_H
 
 #include "resources/ResourceManager.h"
 
@@ -49,3 +51,5 @@ private:
 
 	static std::list< std::weak_ptr<TextureResource> > sTextureList; // list of all textures, used for memory approximations
 };
+
+#endif // ES_CORE_RESOURCES_TEXTURE_RESOURCE_H

@@ -1,4 +1,6 @@
 #pragma once
+#ifndef ES_CORE_UTIL_H
+#define ES_CORE_UTIL_H
 
 #include <string>
 #include <Eigen/Dense>
@@ -34,3 +36,5 @@ boost::filesystem::path makeRelativePath(const boost::filesystem::path& path, co
 boost::filesystem::path resolvePath(const boost::filesystem::path& path, const boost::filesystem::path& relativeTo, bool allowHome);
 
 boost::posix_time::ptime string_to_ptime(const std::string& str, const std::string& fmt = "%Y%m%dT%H%M%S%F%q");
+
+#endif // ES_CORE_UTIL_H

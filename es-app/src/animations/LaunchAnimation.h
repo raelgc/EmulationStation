@@ -1,4 +1,6 @@
 #pragma once
+#ifndef ES_APP_ANIMATIONS_LAUNCH_ANIMATION_H
+#define ES_APP_ANIMATIONS_LAUNCH_ANIMATION_H
 
 #include "animations/Animation.h"
 #include "Log.h"
@@ -62,3 +64,5 @@ private:
 	Eigen::Affine3f& cameraOut;
 	float& fadeOut;
 };
+
+#endif // ES_APP_ANIMATIONS_LAUNCH_ANIMATION_H
