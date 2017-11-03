@@ -12,129 +12,118 @@
 #include "components/ImageComponent.h"
 #include "components/TextComponent.h"
 
-
-// This is a work around for some ambiguity that is introduced in C++11 that boost::assign::map_list_of leave open.
-// We use makeMap(actualmap) to implicitly convert the boost::assign::map_list_of's return type to ElementMapType.
-// Problem exists with gcc 4.7 and Boost 1.51.  Works fine with MSVC2010 without this hack.
-typedef std::map<std::string, ThemeData::ElementPropertyType> ElementMapType;
-template<typename T>
-ElementMapType makeMap(const T& mapInit)
-{
-	ElementMapType m = mapInit;
-	return m;
-}
-
-std::map< std::string, ElementMapType > ThemeData::sElementMap = boost::assign::map_list_of
-	("image", makeMap(boost::assign::map_list_of
-		("pos", NORMALIZED_PAIR)
-		("size", NORMALIZED_PAIR)
-		("maxSize", NORMALIZED_PAIR)
-		("origin", NORMALIZED_PAIR)
-	 	("rotation", FLOAT)
-		("rotationOrigin", NORMALIZED_PAIR)
-		("path", PATH)
-		("default", PATH)
-		("tile", BOOLEAN)
-		("color", COLOR)
-		("zIndex", FLOAT)))
-	("text", makeMap(boost::assign::map_list_of
-		("pos", NORMALIZED_PAIR)
-		("size", NORMALIZED_PAIR)
-		("origin", NORMALIZED_PAIR)
-		("rotation", FLOAT)
-		("rotationOrigin", NORMALIZED_PAIR)
-		("text", STRING)
-		("backgroundColor", COLOR)
-		("fontPath", PATH)
-		("fontSize", FLOAT)
-		("color", COLOR)
-		("alignment", STRING)
-		("forceUppercase", BOOLEAN)
-		("lineSpacing", FLOAT)
-		("value", STRING)
-		("zIndex", FLOAT)))
-	("textlist", makeMap(boost::assign::map_list_of
-		("pos", NORMALIZED_PAIR)
-		("size", NORMALIZED_PAIR)
-		("origin", NORMALIZED_PAIR)
-		("selectorHeight", FLOAT)
-		("selectorOffsetY", FLOAT)
-		("selectorColor", COLOR)
-		("selectorImagePath", PATH)
-		("selectorImageTile", BOOLEAN)
-		("selectedColor", COLOR)
-		("primaryColor", COLOR)
-		("secondaryColor", COLOR)
-		("fontPath", PATH)
-		("fontSize", FLOAT)
-		("scrollSound", PATH)
-		("alignment", STRING)
-		("horizontalMargin", FLOAT)
-		("forceUppercase", BOOLEAN)
-		("lineSpacing", FLOAT)
-		("zIndex", FLOAT)))
-	("container", makeMap(boost::assign::map_list_of
-		("pos", NORMALIZED_PAIR)
-		("size", NORMALIZED_PAIR)
-	 	("origin", NORMALIZED_PAIR)
-		("zIndex", FLOAT)))
-	("ninepatch", makeMap(boost::assign::map_list_of
-		("pos", NORMALIZED_PAIR)
-		("size", NORMALIZED_PAIR)
-		("path", PATH)
-		("zIndex", FLOAT)))
-	("datetime", makeMap(boost::assign::map_list_of
-		("pos", NORMALIZED_PAIR)
-		("size", NORMALIZED_PAIR)
-		("color", COLOR)
-		("fontPath", PATH)
-		("fontSize", FLOAT)
-		("forceUppercase", BOOLEAN)
-		("zIndex", FLOAT)))
-	("rating", makeMap(boost::assign::map_list_of
-		("pos", NORMALIZED_PAIR)
-		("size", NORMALIZED_PAIR)
-		("origin", NORMALIZED_PAIR)
-		("rotation", FLOAT)
-		("rotationOrigin", NORMALIZED_PAIR)
-		("color", COLOR)
-		("filledPath", PATH)
-		("unfilledPath", PATH)
-		("zIndex", FLOAT)))
-	("sound", makeMap(boost::assign::map_list_of
-		("path", PATH)))
-	("helpsystem", makeMap(boost::assign::map_list_of
-		("pos", NORMALIZED_PAIR)
-		("textColor", COLOR)
-		("iconColor", COLOR)
-		("fontPath", PATH)
-		("fontSize", FLOAT)))
-		// We don't support video, but let's not fail for video themes
-		("video", makeMap(boost::assign::map_list_of
-			("pos", NORMALIZED_PAIR)
-			("size", NORMALIZED_PAIR)
-			("maxSize", NORMALIZED_PAIR)
-			("origin", NORMALIZED_PAIR)
-			("rotation", FLOAT)
-			("rotationOrigin", NORMALIZED_PAIR)
-			("default", PATH)
-			("delay", FLOAT)
-			("zIndex", FLOAT)
-			("showSnapshotNoVideo", BOOLEAN)
-			("showSnapshotDelay", BOOLEAN)))
-	("carousel", makeMap(boost::assign::map_list_of
-		("type", STRING)
-		("size", NORMALIZED_PAIR)
-		("pos", NORMALIZED_PAIR)
-		("origin", NORMALIZED_PAIR)
-		("color", COLOR)
-		("logoScale", FLOAT)
-		("logoRotation", FLOAT)
-		("logoRotationOrigin", NORMALIZED_PAIR)
-		("logoSize", NORMALIZED_PAIR)
-		("logoAlignment", STRING)
-		("maxLogoCount", FLOAT)
-		("zIndex", FLOAT)));
+std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> ThemeData::sElementMap {
+	{ "image", {
+		{ "pos", NORMALIZED_PAIR },
+		{ "size", NORMALIZED_PAIR },
+		{ "maxSize", NORMALIZED_PAIR },
+		{ "origin", NORMALIZED_PAIR },
+	 	{ "rotation", FLOAT },
+		{ "rotationOrigin", NORMALIZED_PAIR },
+		{ "path", PATH },
+		{ "default", PATH },
+		{ "tile", BOOLEAN },
+		{ "color", COLOR },
+		{ "zIndex", FLOAT } } },
+	{ "text", {
+		{ "pos", NORMALIZED_PAIR },
+		{ "size", NORMALIZED_PAIR },
+		{ "origin", NORMALIZED_PAIR },
+		{ "rotation", FLOAT },
+		{ "rotationOrigin", NORMALIZED_PAIR },
+		{ "text", STRING },
+		{ "backgroundColor", COLOR },
+		{ "fontPath", PATH },
+		{ "fontSize", FLOAT },
+		{ "color", COLOR },
+		{ "alignment", STRING },
+		{ "forceUppercase", BOOLEAN },
+		{ "lineSpacing", FLOAT },
+		{ "value", STRING },
+		{ "zIndex", FLOAT } } },
+	{ "textlist", {
+		{ "pos", NORMALIZED_PAIR },
+		{ "size", NORMALIZED_PAIR },
+		{ "origin", NORMALIZED_PAIR },
+		{ "selectorHeight", FLOAT },
+		{ "selectorOffsetY", FLOAT },
+		{ "selectorColor", COLOR },
+		{ "selectorImagePath", PATH },
+		{ "selectorImageTile", BOOLEAN },
+		{ "selectedColor", COLOR },
+		{ "primaryColor", COLOR },
+		{ "secondaryColor", COLOR },
+		{ "fontPath", PATH },
+		{ "fontSize", FLOAT },
+		{ "scrollSound", PATH },
+		{ "alignment", STRING },
+		{ "horizontalMargin", FLOAT },
+		{ "forceUppercase", BOOLEAN },
+		{ "lineSpacing", FLOAT },
+		{ "zIndex", FLOAT } } },
+	{ "container", {
+		{ "pos", NORMALIZED_PAIR },
+		{ "size", NORMALIZED_PAIR },
+	 	{ "origin", NORMALIZED_PAIR },
+		{ "zIndex", FLOAT } } },
+	{ "ninepatch", {
+		{ "pos", NORMALIZED_PAIR },
+		{ "size", NORMALIZED_PAIR },
+		{ "path", PATH },
+		{ "zIndex", FLOAT } } },
+	{ "datetime", {
+		{ "pos", NORMALIZED_PAIR },
+		{ "size", NORMALIZED_PAIR },
+		{ "color", COLOR },
+		{ "fontPath", PATH },
+		{ "fontSize", FLOAT },
+		{ "forceUppercase", BOOLEAN },
+		{ "zIndex", FLOAT } } },
+	{ "rating", {
+		{ "pos", NORMALIZED_PAIR },
+		{ "size", NORMALIZED_PAIR },
+		{ "origin", NORMALIZED_PAIR },
+		{ "rotation", FLOAT },
+		{ "rotationOrigin", NORMALIZED_PAIR },
+		{ "color", COLOR },
+		{ "filledPath", PATH },
+		{ "unfilledPath", PATH },
+		{ "zIndex", FLOAT } } },
+	{ "sound", {
+		{ "path", PATH } } },
+	{ "helpsystem", {
+		{ "pos", NORMALIZED_PAIR },
+		{ "textColor", COLOR },
+		{ "iconColor", COLOR },
+		{ "fontPath", PATH },
+		{ "fontSize", FLOAT } } },
+	// We don't support video, but let's not fail with video themes parsing	
+	{ "video", {
+		{ "pos", NORMALIZED_PAIR },
+		{ "size", NORMALIZED_PAIR },
+		{ "maxSize", NORMALIZED_PAIR },
+		{ "origin", NORMALIZED_PAIR },
+		{ "rotation", FLOAT },
+		{ "rotationOrigin", NORMALIZED_PAIR },
+		{ "default", PATH },
+		{ "delay", FLOAT },
+		{ "zIndex", FLOAT },
+		{ "showSnapshotNoVideo", BOOLEAN },
+		{ "showSnapshotDelay", BOOLEAN } } },
+	{ "carousel", {
+		{ "type", STRING },
+		{ "size", NORMALIZED_PAIR },
+		{ "pos", NORMALIZED_PAIR },
+		{ "origin", NORMALIZED_PAIR },
+		{ "color", COLOR },
+		{ "logoScale", FLOAT },
+		{ "logoRotation", FLOAT },
+		{ "logoRotationOrigin", NORMALIZED_PAIR },
+		{ "logoSize", NORMALIZED_PAIR },
+		{ "logoAlignment", STRING },
+		{ "maxLogoCount", FLOAT },
+		{ "zIndex", FLOAT } } }
+};
 
 namespace fs = boost::filesystem;
 
