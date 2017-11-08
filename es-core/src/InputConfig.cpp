@@ -19,6 +19,8 @@ std::string inputTypeToString(InputType type)
 		return "hat";
 	case TYPE_KEY:
 		return "key";
+	case TYPE_CEC_BUTTON:
+		return "cec-button";
 	default:
 		return "error";
 	}
@@ -34,6 +36,8 @@ InputType stringToInputType(const std::string& type)
 		return TYPE_HAT;
 	if(type == "key")
 		return TYPE_KEY;
+	if(type == "cec-button")
+		return TYPE_CEC_BUTTON;
 	return TYPE_COUNT;
 }
 

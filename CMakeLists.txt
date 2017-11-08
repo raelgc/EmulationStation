@@ -56,6 +56,7 @@ find_package(Boost REQUIRED COMPONENTS system filesystem date_time locale)
 endif()
 find_package(Eigen3 REQUIRED)
 find_package(CURL REQUIRED)
+find_package(libCEC)
 
 #add ALSA for Linux
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -66,6 +67,10 @@ endif()
 #set up compiler flags and excutable names
 if(DEFINED BCMHOST)
     add_definitions(-D_RPI_)
+endif()
+
+if(DEFINED libCEC_FOUND)
+    add_definitions(-DHAVE_LIBCEC)
 endif()
 
 #-------------------------------------------------------------------------------
@@ -116,6 +121,13 @@ set(COMMON_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/es-core/src
 )
 
+#add libCEC_INCLUDE_DIR
+if(DEFINED libCEC_FOUND)
+    LIST(APPEND COMMON_INCLUDE_DIRS
+        ${libCEC_INCLUDE_DIR}
+    )
+endif()
+
 #add ALSA for Linux
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     LIST(APPEND COMMON_INCLUDE_DIRS
@@ -159,11 +171,19 @@ set(COMMON_LIBRARIES
     ${Boost_LIBRARIES}
     ${FREETYPE_LIBRARIES}
     ${FreeImage_LIBRARIES}
-	${SDL2_LIBRARY}
+    ${SDL2_LIBRARY}
     ${CURL_LIBRARIES}
     pugixml
     nanosvg
 )
+
+#add libCEC_LIBRARIES
+if(DEFINED libCEC_FOUND)
+    LIST(APPEND COMMON_LIBRARIES
+        dl
+        ${libCEC_LIBRARIES}
+    )
+endif()
 
 #add ALSA for Linux
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
