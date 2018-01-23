@@ -60,6 +60,8 @@ public:
   void setSize(float w, float h);
   virtual void onSizeChanged() {};
 
+	virtual Eigen::Vector2f getRotationSize() const { return getSize(); };
+
 	float getRotation() const;
 	void setRotation(float rotation);
 	inline void setRotationDegrees(float rotation) { setRotation((float) (rotation * M_PI / 180)); }
