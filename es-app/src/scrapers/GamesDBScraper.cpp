@@ -44,7 +44,7 @@ const std::map<PlatformId, const char*> gamesdb_platformid_map = boost::assign::
 	(NINTENDO_WII, "Nintendo Wii")
 	(NINTENDO_WII_U, "Nintendo Wii U")
 	(NINTENDO_VIRTUAL_BOY, "Nintendo Virtual Boy")
-	(NINTENDO_GAME_AND_WATCH, "Game & Watch")
+	(NINTENDO_GAME_AND_WATCH, "Game &amp; Watch")
 	(PC, "PC")
 	(SEGA_32X, "Sega 32X")
 	(SEGA_CD, "Sega CD")
