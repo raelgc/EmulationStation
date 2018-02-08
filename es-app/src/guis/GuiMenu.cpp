@@ -217,9 +217,10 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 			mWindow->pushGui(s);
 	});
 
+	std::string  buildDate = (Settings::getInstance()->getBool("Debug") ? std::string( "   (" + Utils::String::toUpper(PROGRAM_BUILT_STRING) + ")") : (""));
 	mVersion.setFont(Font::get(FONT_SIZE_SMALL));
-	mVersion.setColor(0xC6C6C6FF);
-	mVersion.setText("EMULATIONSTATION V" + strToUpper(PROGRAM_VERSION_STRING));
+	mVersion.setColor(0x5E5E5EFF);
+	mVersion.setText("EMULATIONSTATION V" + Utils::String::toUpper(PROGRAM_VERSION_STRING) + buildDate);
 	mVersion.setHorizontalAlignment(ALIGN_CENTER);
 
 	addChild(&mMenu);
