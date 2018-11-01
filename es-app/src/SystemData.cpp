@@ -144,6 +144,20 @@ void SystemData::launchGame(Window* window, FileData* game)
 	game->metadata.setTime("lastplayed", time);
 }
 
+#ifndef WIN32
+// test to see if a file is hidden in *nix (dot-prefixed)
+// could be expanded to check for Windows hidden attribute
+bool isHidden(const fs::path &filePath)
+{
+	fs::path::string_type fileName = filePath.filename().string();
+	if(fileName[0] == '.')
+	{
+		return true;
+	}
+	return false;
+}
+#endif
+
 void SystemData::populateFolder(FileData* folder)
 {
 	const fs::path& folderPath = folder->getPath();
@@ -186,6 +200,11 @@ void SystemData::populateFolder(FileData* folder)
 		isGame = false;
 		if(std::find(mSearchExtensions.begin(), mSearchExtensions.end(), extension) != mSearchExtensions.end())
 		{
+			#ifndef WIN32
+						// skip hidden files
+						if(isHidden(filePath))
+							continue;
+			#endif
 			FileData* newGame = new FileData(GAME, filePath.generic_string(), this);
 			folder->addChild(newGame);
 			isGame = true;
