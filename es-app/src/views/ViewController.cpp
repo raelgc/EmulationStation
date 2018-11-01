@@ -5,14 +5,13 @@
 
 #include "views/gamelist/BasicGameListView.h"
 #include "views/gamelist/DetailedGameListView.h"
-#include "views/gamelist/VideoGameListView.h"
 #include "views/gamelist/GridGameListView.h"
 #include "guis/GuiMenu.h"
 #include "guis/GuiMsgBox.h"
 #include "animations/LaunchAnimation.h"
 #include "animations/MoveCameraAnimation.h"
 #include "animations/LambdaAnimation.h"
-#include <SDL.h>
+// #include <SDL.h>
 
 ViewController* ViewController::sInstance = NULL;
 
@@ -57,12 +56,6 @@ int ViewController::getSystemId(SystemData* system)
 
 void ViewController::goToSystemView(SystemData* system)
 {
-	// Tell any current view it's about to be hidden
-	if (mCurrentView)
-	{
-		mCurrentView->onHide();
-	}
-
 	mState.viewing = SYSTEM_SELECT;
 	mState.system = system;
 
@@ -107,22 +100,14 @@ void ViewController::goToGameList(SystemData* system)
 	mState.viewing = GAME_LIST;
 	mState.system = system;
 
-	if (mCurrentView)
-	{
-		mCurrentView->onHide();
-	}
 	mCurrentView = getGameListView(system);
-	if (mCurrentView)
-	{
-		mCurrentView->onShow();
-	}
 	playViewTransition();
 }
 
 void ViewController::playViewTransition()
 {
 	Eigen::Vector3f target(Eigen::Vector3f::Identity());
-	if(mCurrentView) 
+	if(mCurrentView)
 		target = mCurrentView->getPosition();
 
 	// no need to animate, we're not going anywhere (probably goToNextGamelist() or goToPrevGamelist() when there's only 1 system)
@@ -179,10 +164,6 @@ void ViewController::launch(FileData* game, Eigen::Vector3f center)
 		return;
 	}
 
-	// Hide the current view
-	if (mCurrentView)
-		mCurrentView->onHide();
-
 	Eigen::Affine3f origCamera = mCamera;
 	origCamera.translation() = -mCurrentView->getPosition();
 
@@ -207,7 +188,7 @@ void ViewController::launch(FileData* game, Eigen::Vector3f center)
 		});
 	}else{
 		// move camera to zoom in on center + fade out, launch game, come back in
-		setAnimation(new LaunchAnimation(mCamera, mFadeOpacity, center, 1500), 0, [this, origCamera, center, game] 
+		setAnimation(new LaunchAnimation(mCamera, mFadeOpacity, center, 1500), 0, [this, origCamera, center, game]
 		{
 			game->getSystem()->launchGame(mWindow, game);
 			mCamera = origCamera;
@@ -230,30 +211,21 @@ std::shared_ptr<IGameListView> ViewController::getGameListView(SystemData* syste
 
 	//decide type
 	bool detailed = false;
-	bool video	  = false;
 	std::vector<FileData*> files = system->getRootFolder()->getFilesRecursive(GAME | FOLDER);
 	for(auto it = files.begin(); it != files.end(); it++)
 	{
-		if(!(*it)->getVideoPath().empty())
-		{
-			video = true;
-			break;
-		}
-		else if(!(*it)->getThumbnailPath().empty())
+		if(!(*it)->getThumbnailPath().empty())
 		{
 			detailed = true;
-			// Don't break out in case any subsequent files have video
+			break;
 		}
 	}
-		
-	if (video)
-		// Create the view
-		view = std::shared_ptr<IGameListView>(new VideoGameListView(mWindow, system->getRootFolder()));
-	else if(detailed)
+
+	if(detailed)
 		view = std::shared_ptr<IGameListView>(new DetailedGameListView(mWindow, system->getRootFolder()));
 	else
 		view = std::shared_ptr<IGameListView>(new BasicGameListView(mWindow, system->getRootFolder()));
-		
+
 	// uncomment for experimental "image grid" view
 	//view = std::shared_ptr<IGameListView>(new GridGameListView(mWindow, system->getRootFolder()));
 
@@ -321,7 +293,7 @@ void ViewController::render(const Eigen::Affine3f& parentTrans)
 
 	// draw systemview
 	getSystemListView()->render(trans);
-	
+
 	// draw gamelists
 	for(auto it = mGameListViews.begin(); it != mGameListViews.end(); it++)
 	{
@@ -376,10 +348,6 @@ void ViewController::reloadGameListView(IGameListView* view, bool reloadTheme)
 			break;
 		}
 	}
-	// Redisplay the current view
-	if (mCurrentView)
-		mCurrentView->onShow();
-
 }
 
 void ViewController::reloadAll()
@@ -406,7 +374,9 @@ void ViewController::reloadAll()
 		mCurrentView = getGameListView(mState.getSystem());
 	}else if(mState.viewing == SYSTEM_SELECT)
 	{
-		mSystemListView->goToSystem(mState.getSystem(), false);
+		SystemData* system = mState.getSystem();
+		goToSystemView(SystemData::sSystemVector.front());
+		mSystemListView->goToSystem(system, false);
 		mCurrentView = mSystemListView;
 	}else{
 		goToSystemView(SystemData::sSystemVector.front());
@@ -420,7 +390,7 @@ std::vector<HelpPrompt> ViewController::getHelpPrompts()
 	std::vector<HelpPrompt> prompts;
 	if(!mCurrentView)
 		return prompts;
-	
+
 	prompts = mCurrentView->getHelpPrompts();
 	prompts.push_back(HelpPrompt("start", "menu"));
 

@@ -389,9 +389,9 @@ void SystemView::renderCarousel(const Eigen::Affine3f& trans)
 	int center = (int)(mCamOffset);
 	int logoCount = std::min(mCarousel.maxLogoCount, (int)mEntries.size());
 
-	// Adding texture loading buffers depending on scrolling speed and status	
-	int bufferIndex = getScrollingVelocity() + 1;	
-	
+	// Adding texture loading buffers depending on scrolling speed and status
+	int bufferIndex = getScrollingVelocity() + 1;
+
 	for (int i = center - logoCount / 2 + logoBuffersLeft[bufferIndex]; i <= center + logoCount / 2 + logoBuffersRight[bufferIndex]; i++)
 	{
 		int index = i;
@@ -427,7 +427,7 @@ void SystemView::renderInfoBar(const Eigen::Affine3f& trans)
 void SystemView::renderExtras(const Eigen::Affine3f& trans, float lower, float upper)
 {
 	int extrasCenter = (int)mExtrasCamOffset;
-	
+
 	// Adding texture loading buffers depending on scrolling speed and status
 	int bufferIndex = getScrollingVelocity() + 1;
 

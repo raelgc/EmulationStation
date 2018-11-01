@@ -48,7 +48,7 @@ void Settings::setDefaults()
 	mBoolMap["SplashScreen"] = true;
 
 #ifdef _RPI_
-	// don't enable VSync by default on the Pi, since it already 
+	// don't enable VSync by default on the Pi, since it already
 	// has trouble trying to render things at 60fps in certain menus
 	mBoolMap["VSync"] = false;
 #else

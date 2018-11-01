@@ -37,7 +37,6 @@ namespace ThemeFlags
 		TEXT = 512,
 		FORCE_UPPERCASE = 1024,
 		LINE_SPACING = 2048,
-		DELAY = 4096,
 		Z_INDEX = 8192,
 
 		ALL = 0xFFFFFFFF
@@ -53,7 +52,7 @@ public:
 
 	template<typename T>
 	friend ThemeException& operator<<(ThemeException& e, T msg);
-	
+
 	inline void setFiles(const std::deque<boost::filesystem::path>& deque)
 	{
 		*this << "from theme \"" << deque.front().string() << "\"\n";
@@ -122,6 +121,8 @@ public:
 		FLOAT,
 		BOOLEAN
 	};
+
+	bool hasView(const std::string& view);
 
 	// If expectedType is an empty string, will do no type checking.
 	const ThemeElement* getElement(const std::string& view, const std::string& element, const std::string& expectedType) const;

@@ -18,12 +18,13 @@ Eigen::Vector2i ImageComponent::getTextureSize() const
 
 Eigen::Vector2f ImageComponent::getCenter() const
 {
-	return Eigen::Vector2f(mPosition.x() - (getSize().x() * mOrigin.x()) + getSize().x() / 2, 
+	return Eigen::Vector2f(mPosition.x() - (getSize().x() * mOrigin.x()) + getSize().x() / 2,
 		mPosition.y() - (getSize().y() * mOrigin.y()) + getSize().y() / 2);
 }
 
-ImageComponent::ImageComponent(Window* window) : GuiComponent(window), 
-	mTargetIsMax(false), mFlipX(false), mFlipY(false), mOrigin(0.0, 0.0), mTargetSize(0, 0), mColorShift(0xFFFFFFFF)
+ImageComponent::ImageComponent(Window* window, bool forceLoad, bool dynamic) : GuiComponent(window),
+	mTargetIsMax(false), mFlipX(false), mFlipY(false), mOrigin(0.0, 0.0), mTargetSize(0, 0), mColorShift(0xFFFFFFFF),
+	mForceLoad(forceLoad), mDynamic(dynamic), mFadeOpacity(0.0f), mFading(false)
 {
 	updateColors();
 }
@@ -40,6 +41,7 @@ void ImageComponent::resize()
 	SVGResource* svg = dynamic_cast<SVGResource*>(mTexture.get());
 
 	const Eigen::Vector2f textureSize = svg ? svg->getSourceImageSize() : Eigen::Vector2f((float)mTexture->getSize().x(), (float)mTexture->getSize().y());
+
 	if(textureSize.isZero())
 		return;
 
@@ -49,7 +51,7 @@ void ImageComponent::resize()
 	}else{
 		// SVG rasterization is determined by height (see SVGResource.cpp), and rasterization is done in terms of pixels
 		// if rounding is off enough in the rasterization step (for images with extreme aspect ratios), it can cause cutoff when the aspect ratio breaks
-		// so, we always make sure the resultant height is an integer to make sure cutoff doesn't happen, and scale width from that 
+		// so, we always make sure the resultant height is an integer to make sure cutoff doesn't happen, and scale width from that
 		// (you'll see this scattered throughout the function)
 		// this is probably not the best way, so if you're familiar with this problem and have a better solution, please make a pull request!
 
@@ -58,7 +60,7 @@ void ImageComponent::resize()
 			mSize = textureSize;
 
 			Eigen::Vector2f resizeScale((mTargetSize.x() / mSize.x()), (mTargetSize.y() / mSize.y()));
-			
+
 			if(resizeScale.x() < resizeScale.y())
 			{
 				mSize[0] *= resizeScale.x();
@@ -121,7 +123,7 @@ void ImageComponent::setImage(const char* path, size_t length, bool tile)
 
 	mTexture = TextureResource::get("", tile);
 	mTexture->initFromMemory(path, length);
-	
+
 	resize();
 }
 
@@ -166,6 +168,9 @@ void ImageComponent::setFlipY(bool flip)
 void ImageComponent::setColorShift(unsigned int color)
 {
 	mColorShift = color;
+	// Grab the opacity from the color shift because we may need to apply it if
+	// fading textures in
+	mOpacity = color & 0xff;
 	updateColors();
 }
 
@@ -241,7 +246,7 @@ void ImageComponent::render(const Eigen::Affine3f& parentTrans)
 {
 	Eigen::Affine3f trans = roundMatrix(parentTrans * getTransform());
 	Renderer::setMatrix(trans);
-	
+
 	if(mTexture && mOpacity > 0)
 	{
 		if(mTexture->isInitialized())
@@ -294,7 +299,7 @@ void ImageComponent::applyTheme(const std::shared_ptr<ThemeData>& theme, const s
 	}
 
 	Eigen::Vector2f scale = getParent() ? getParent()->getSize() : Eigen::Vector2f((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
-	
+
 	if(properties & POSITION && elem->has("pos"))
 	{
 		Eigen::Vector2f denormalized = elem->get<Eigen::Vector2f>("pos").cwiseProduct(scale);

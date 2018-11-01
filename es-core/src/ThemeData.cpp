@@ -23,9 +23,6 @@ ElementMapType makeMap(const T& mapInit)
 	return m;
 }
 
-std::vector<std::string> ThemeData::sSupportedViews = boost::assign::list_of("system")("basic")("detailed")("video");
-std::vector<std::string> ThemeData::sSupportedFeatures = boost::assign::list_of("video")("carousel")("z-index");
-
 std::map< std::string, ElementMapType > ThemeData::sElementMap = boost::assign::map_list_of
 	("image", makeMap(boost::assign::map_list_of
 		("pos", NORMALIZED_PAIR)
@@ -95,15 +92,6 @@ std::map< std::string, ElementMapType > ThemeData::sElementMap = boost::assign::
 		("iconColor", COLOR)
 		("fontPath", PATH)
 		("fontSize", FLOAT)))
-	("video", makeMap(boost::assign::map_list_of
-		("pos", NORMALIZED_PAIR)
-		("size", NORMALIZED_PAIR)
-		("origin", NORMALIZED_PAIR)
-		("default", PATH)
-		("delay", FLOAT)
-		("zIndex", FLOAT)
-		("showSnapshotNoVideo", BOOLEAN)
-		("showSnapshotDelay", BOOLEAN)))
 	("carousel", makeMap(boost::assign::map_list_of
 		("type", STRING)
 		("size", NORMALIZED_PAIR)
@@ -363,6 +351,12 @@ void ThemeData::parseElement(const pugi::xml_node& root, const std::map<std::str
 			throw error << "Unknown ElementPropertyType for \"" << root.attribute("name").as_string() << "\", property " << node.name();
 		}
 	}
+}
+
+bool ThemeData::hasView(const std::string& view)
+{
+	auto viewIt = mViews.find(view);
+	return (viewIt != mViews.end());
 }
 
 

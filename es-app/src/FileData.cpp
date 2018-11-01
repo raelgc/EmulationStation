@@ -81,16 +81,6 @@ const std::string& FileData::getThumbnailPath() const
 		return metadata.get("image");
 }
 
-const std::string& FileData::getVideoPath() const
-{
-	return metadata.get("video");
-}
-
-const std::string& FileData::getMarqueePath() const
-{
-	return metadata.get("marquee");
-}
-
 
 std::vector<FileData*> FileData::getFilesRecursive(unsigned int typeMask) const
 {
@@ -100,7 +90,7 @@ std::vector<FileData*> FileData::getFilesRecursive(unsigned int typeMask) const
 	{
 		if((*it)->getType() & typeMask)
 			out.push_back(*it);
-		
+
 		if((*it)->getChildren().size() > 0)
 		{
 			std::vector<FileData*> subchildren = (*it)->getFilesRecursive(typeMask);

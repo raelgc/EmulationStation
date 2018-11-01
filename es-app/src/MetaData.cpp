@@ -5,14 +5,12 @@
 
 namespace fs = boost::filesystem;
 
-MetaDataDecl gameDecls[] = { 
+MetaDataDecl gameDecls[] = {
 	// key,			type,					default,			statistic,	name in GuiMetaDataEd,	prompt in GuiMetaDataEd
-	{"name",		MD_STRING,				"", 				false,		"name",					"enter game name"}, 
+	{"name",		MD_STRING,				"", 				false,		"name",					"enter game name"},
 	{"desc",		MD_MULTILINE_STRING,	"", 				false,		"description",			"enter description"},
-	{"image",		MD_PATH,				"", 				false,		"image",				"enter path to image"},
-	{"video",		MD_PATH		,			"", 				false,		"video",				"enter path to video"},
-	{"marquee",		MD_PATH,				"", 				false,		"marquee",				"enter path to marquee"},
-	{"thumbnail",	MD_PATH,				"", 				false,		"thumbnail",			"enter path to thumbnail"},
+	{"image",		MD_IMAGE_PATH,			"", 				false,		"image",				"enter path to image"},
+	{"thumbnail",	MD_IMAGE_PATH,			"", 				false,		"thumbnail",			"enter path to thumbnail"},
 	{"rating",		MD_RATING,				"0.000000", 		false,		"rating",				"enter rating"},
 	{"releasedate", MD_DATE,				"not-a-date-time", 	false,		"release date",			"enter release date"},
 	{"developer",	MD_STRING,				"unknown",			false,		"developer",			"enter game developer"},
@@ -24,19 +22,11 @@ MetaDataDecl gameDecls[] = {
 };
 const std::vector<MetaDataDecl> gameMDD(gameDecls, gameDecls + sizeof(gameDecls) / sizeof(gameDecls[0]));
 
-MetaDataDecl folderDecls[] = { 
-	{"name",		MD_STRING,				"", 	false,		"name",					"enter game name"}, 
-	{"desc",		MD_MULTILINE_STRING,	"", 	false,		"description",			"enter description"},
-	{"image",		MD_PATH,				"", 	false,		"image",				"enter path to image"},
-	{"thumbnail",	MD_PATH,				"", 	false,		"thumbnail",			"enter path to thumbnail"},
-	{"video",	MD_PATH,				"", 	false,		"video",				"enter path to video"},
-	{"marquee",	MD_PATH,				"", 	false,		"marquee",				"enter path to marquee"},
-	{"rating",		MD_RATING,				"0.000000", 		false,		"rating",				"enter rating"},
-	{"releasedate", MD_DATE,				"not-a-date-time", 	false,		"release date",			"enter release date"},
-	{"developer",	MD_STRING,				"unknown",			false,		"developer",			"enter game developer"},
-	{"publisher",	MD_STRING,				"unknown",			false,		"publisher",			"enter game publisher"},
-	{"genre",		MD_STRING,				"unknown",			false,		"genre",				"enter game genre"},
-	{"players",		MD_INT,					"1",				false,		"players",				"enter number of players"}
+MetaDataDecl folderDecls[] = {
+	{"name",		MD_STRING,				"", 	false},
+	{"desc",		MD_MULTILINE_STRING,	"", 	false},
+	{"image",		MD_IMAGE_PATH,			"", 	false},
+	{"thumbnail",	MD_IMAGE_PATH,			"", 	false},
 };
 const std::vector<MetaDataDecl> folderMDD(folderDecls, folderDecls + sizeof(folderDecls) / sizeof(folderDecls[0]));
 
@@ -78,10 +68,9 @@ MetaDataList MetaDataList::createFromXML(MetaDataListType type, pugi::xml_node n
 		{
 			// if it's a path, resolve relative paths
 			std::string value = md.text().get();
-			if (iter->type == MD_PATH)
-			{
+			if(iter->type == MD_IMAGE_PATH)
 				value = resolvePath(value, relativeTo, true).generic_string();
-			}
+
 			mdl.set(iter->key, value);
 		}else{
 			mdl.set(iter->key, iter->defaultValue);
@@ -104,10 +93,10 @@ void MetaDataList::appendToXML(pugi::xml_node parent, bool ignoreDefaults, const
 			// if it's just the default (and we ignore defaults), don't write it
 			if(ignoreDefaults && mapIter->second == mddIter->defaultValue)
 				continue;
-			
+
 			// try and make paths relative if we can
 			std::string value = mapIter->second;
-			if (mddIter->type == MD_PATH)
+			if(mddIter->type == MD_IMAGE_PATH)
 				value = makeRelativePath(value, relativeTo, true).generic_string();
 
 			parent.append_child(mapIter->first.c_str()).text().set(value.c_str());
