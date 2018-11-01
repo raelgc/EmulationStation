@@ -190,7 +190,7 @@ void ViewController::launch(FileData* game, Eigen::Vector3f center)
 		};
 		setAnimation(new LambdaAnimation(fadeFunc, 800), 0, [this, game, fadeFunc]
 		{
-			game->launchGame(mWindow);
+			game->getSystem()->launchGame(mWindow, game);
 			setAnimation(new LambdaAnimation(fadeFunc, 800), 0, [this] { mLockInput = false; }, true);
 			this->onFileChanged(game, FILE_METADATA_CHANGED);
 		});

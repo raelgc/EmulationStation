@@ -452,6 +452,11 @@ bool SystemData::hasGamelist() const
 	return (fs::exists(getGamelistPath(false)));
 }
 
+bool SystemData::isGameSystem() const
+{
+	return (mName != "retropie");
+}
+
 unsigned int SystemData::getGameCount() const
 {
 	return mRootFolder->getFilesRecursive(GAME).size();

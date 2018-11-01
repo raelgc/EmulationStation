@@ -270,25 +270,6 @@ void ThemeData::parseIncludes(const pugi::xml_node& root)
 	}
 }
 
-void ThemeData::parseFeatures(const pugi::xml_node& root)
-{
-	ThemeException error;
-	error.setFiles(mPaths);
-
-	for(pugi::xml_node node = root.child("feature"); node; node = node.next_sibling("feature"))
-	{
-		if(!node.attribute("supported"))
-			throw error << "Feature missing \"supported\" attribute!";
-
-		const std::string supportedAttr = node.attribute("supported").as_string();
-
-		if (std::find(sSupportedFeatures.begin(), sSupportedFeatures.end(), supportedAttr) != sSupportedFeatures.end())
-		{
-			parseViews(node);
-		}
-	}
-}
-
 void ThemeData::parseVariables(const pugi::xml_node& root)
 {
 	ThemeException error;
