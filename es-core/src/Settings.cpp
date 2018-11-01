@@ -57,7 +57,6 @@ void Settings::setDefaults()
 
 	mBoolMap["EnableSounds"] = true;
 	mBoolMap["ShowHelpPrompts"] = true;
-	mBoolMap["ScrapeRatings"] = true;
 	mBoolMap["IgnoreGamelist"] = false;
 	mBoolMap["HideConsole"] = true;
 	mBoolMap["QuickSystemSelect"] = true;
@@ -68,13 +67,10 @@ void Settings::setDefaults()
 	mBoolMap["DebugText"] = false;
 
 	mIntMap["ScreenSaverTime"] = 5*60*1000; // 5 minutes
-	mIntMap["ScraperResizeWidth"] = 400;
-	mIntMap["ScraperResizeHeight"] = 0;
 
 	mStringMap["TransitionStyle"] = "fade";
 	mStringMap["ThemeSet"] = "";
 	mStringMap["ScreenSaverBehavior"] = "dim";
-	mStringMap["Scraper"] = "TheGamesDB";
 
 	// Audio out device for volume control
 	#ifdef _RPI_

@@ -71,7 +71,7 @@ void GuiGamelistOptions::openMetaDataEd()
 {
 	// open metadata editor
 	FileData* file = getGamelist()->getCursor();
-	ScraperSearchParams p;
+	SearchParams p;
 	p.game = file;
 	p.system = file->getSystem();
 

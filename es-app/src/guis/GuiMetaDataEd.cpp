@@ -4,7 +4,7 @@
 #include "components/AsyncReqComponent.h"
 #include "Settings.h"
 #include "views/ViewController.h"
-#include "guis/GuiGameScraper.h"
+#include "SearchParams.h"
 #include "guis/GuiMsgBox.h"
 #include <boost/filesystem.hpp>
 
@@ -15,24 +15,24 @@
 
 using namespace Eigen;
 
-GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector<MetaDataDecl>& mdd, ScraperSearchParams scraperParams, 
-	const std::string& header, std::function<void()> saveCallback, std::function<void()> deleteFunc) : GuiComponent(window), 
-	mScraperParams(scraperParams), 
+GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector<MetaDataDecl>& mdd, SearchParams searchParams,
+	const std::string& header, std::function<void()> saveCallback, std::function<void()> deleteFunc) : GuiComponent(window),
+	mSearchParams(searchParams),
 
-	mBackground(window, ":/frame.png"), 
+	mBackground(window, ":/frame.png"),
 	mGrid(window, Vector2i(1, 3)),
 
-	mMetaDataDecl(mdd), 
-	mMetaData(md), 
+	mMetaDataDecl(mdd),
+	mMetaData(md),
 	mSavedCallback(saveCallback), mDeleteFunc(deleteFunc)
 {
 	addChild(&mBackground);
 	addChild(&mGrid);
 
 	mHeaderGrid = std::make_shared<ComponentGrid>(mWindow, Vector2i(1, 5));
-	
+
 	mTitle = std::make_shared<TextComponent>(mWindow, "EDIT METADATA", Font::get(FONT_SIZE_LARGE), 0x555555FF, ALIGN_CENTER);
-	mSubtitle = std::make_shared<TextComponent>(mWindow, strToUpper(scraperParams.game->getPath().filename().generic_string()), 
+	mSubtitle = std::make_shared<TextComponent>(mWindow, strToUpper(searchParams.game->getPath().filename().generic_string()),
 		Font::get(FONT_SIZE_SMALL), 0x777777FF, ALIGN_CENTER);
 	mHeaderGrid->setEntry(mTitle, Vector2i(0, 1), false, true);
 	mHeaderGrid->setEntry(mSubtitle, Vector2i(0, 3), false, true);
@@ -101,7 +101,7 @@ GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector
 				// MD_STRING
 				ed = std::make_shared<TextComponent>(window, "", Font::get(FONT_SIZE_SMALL, FONT_PATH_LIGHT), 0x777777FF, ALIGN_RIGHT);
 				row.addElement(ed, true);
-				
+
 				auto spacer = std::make_shared<GuiComponent>(mWindow);
 				spacer->setSize(Renderer::getScreenWidth() * 0.005f, 0);
 				row.addElement(spacer, false);
@@ -128,9 +128,6 @@ GuiMetaDataEd::GuiMetaDataEd(Window* window, MetaDataList* md, const std::vector
 	}
 
 	std::vector< std::shared_ptr<ButtonComponent> > buttons;
-
-	if(!scraperParams.system->hasPlatformId(PlatformIds::PLATFORM_IGNORE))
-		buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "SCRAPE", "scrape", std::bind(&GuiMetaDataEd::fetch, this)));
 
 	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "SAVE", "save", [&] { save(); delete this; }));
 	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "CANCEL", "cancel", [&] { delete this; }));
@@ -183,24 +180,6 @@ void GuiMetaDataEd::save()
 		mSavedCallback();
 }
 
-void GuiMetaDataEd::fetch()
-{
-	GuiGameScraper* scr = new GuiGameScraper(mWindow, mScraperParams, std::bind(&GuiMetaDataEd::fetchDone, this, std::placeholders::_1));
-	mWindow->pushGui(scr);
-}
-
-void GuiMetaDataEd::fetchDone(const ScraperSearchResult& result)
-{
-	for(unsigned int i = 0; i < mEditors.size(); i++)
-	{
-		if(mMetaDataDecl.at(i).isStatistic)
-			continue;
-
-		const std::string& key = mMetaDataDecl.at(i).key;
-		mEditors.at(i)->setValue(result.mdl.get(key));
-	}
-}
-
 void GuiMetaDataEd::close(bool closeAllWindows)
 {
 	// find out if the user made any changes
@@ -231,7 +210,7 @@ void GuiMetaDataEd::close(bool closeAllWindows)
 	if(dirty)
 	{
 		// changes were made, ask if the user wants to save them
-		mWindow->pushGui(new GuiMsgBox(mWindow, 
+		mWindow->pushGui(new GuiMsgBox(mWindow,
 			"SAVE CHANGES?",
 			"YES", [this, closeFunc] { save(); closeFunc(); },
 			"NO", closeFunc

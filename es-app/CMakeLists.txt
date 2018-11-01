@@ -6,7 +6,6 @@ set(ES_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/FileSorts.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/MetaData.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/PlatformId.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/ScraperCmdLine.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/SystemData.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/VolumeControl.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Gamelist.h
@@ -14,23 +13,14 @@ set(ES_HEADERS
     # GuiComponents
     ${CMAKE_CURRENT_SOURCE_DIR}/src/components/AsyncReqComponent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/components/RatingComponent.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/components/ScraperSearchComponent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/components/TextListComponent.h
 
     # Guis
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiFastSelect.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiMetaDataEd.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiGameScraper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiGamelistOptions.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiMenu.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiSettings.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiScraperMulti.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiScraperStart.h
-
-    # Scrapers
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/scrapers/Scraper.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/scrapers/GamesDBScraper.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/scrapers/TheArchiveScraper.h
 
     # Views
     ${CMAKE_CURRENT_SOURCE_DIR}/src/views/gamelist/BasicGameListView.h
@@ -53,7 +43,6 @@ set(ES_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/MameNameMap.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/MetaData.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/PlatformId.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/ScraperCmdLine.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/SystemData.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/VolumeControl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Gamelist.cpp
@@ -61,22 +50,13 @@ set(ES_SOURCES
     # GuiComponents
     ${CMAKE_CURRENT_SOURCE_DIR}/src/components/AsyncReqComponent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/components/RatingComponent.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/components/ScraperSearchComponent.cpp
 
     # Guis
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiFastSelect.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiMetaDataEd.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiGameScraper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiGamelistOptions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiMenu.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiSettings.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiScraperMulti.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiScraperStart.cpp
-
-    # Scrapers
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/scrapers/Scraper.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/scrapers/GamesDBScraper.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/scrapers/TheArchiveScraper.cpp
 
     # Views
     ${CMAKE_CURRENT_SOURCE_DIR}/src/views/gamelist/BasicGameListView.cpp
@@ -104,7 +84,7 @@ target_link_libraries(emulationstation ${COMMON_LIBRARIES} es-core)
 
 # special properties for Windows builds
 if(MSVC)
-    # Always compile with the "WINDOWS" subsystem to avoid console window flashing at startup 
+    # Always compile with the "WINDOWS" subsystem to avoid console window flashing at startup
     # when --debug is not set (see es-core/src/main.cpp for explanation).
     # The console will still be shown if launched with --debug.
     # Note that up to CMake 2.8.10 this feature is broken: http://public.kitware.com/Bug/view.php?id=12566
