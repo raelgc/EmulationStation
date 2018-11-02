@@ -34,7 +34,6 @@ set(CORE_HEADERS
 	${CMAKE_CURRENT_SOURCE_DIR}/src/components/HelpComponent.h
 	${CMAKE_CURRENT_SOURCE_DIR}/src/components/IList.h
 	${CMAKE_CURRENT_SOURCE_DIR}/src/components/ImageComponent.h
-	${CMAKE_CURRENT_SOURCE_DIR}/src/components/ImageGridComponent.h
 	${CMAKE_CURRENT_SOURCE_DIR}/src/components/MenuComponent.h
 	${CMAKE_CURRENT_SOURCE_DIR}/src/components/NinePatchComponent.h
 	${CMAKE_CURRENT_SOURCE_DIR}/src/components/OptionListComponent.h

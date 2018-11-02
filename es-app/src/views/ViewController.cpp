@@ -5,7 +5,6 @@
 
 #include "views/gamelist/BasicGameListView.h"
 #include "views/gamelist/DetailedGameListView.h"
-#include "views/gamelist/GridGameListView.h"
 #include "guis/GuiMenu.h"
 #include "guis/GuiMsgBox.h"
 #include "animations/LaunchAnimation.h"
@@ -242,9 +241,6 @@ std::shared_ptr<IGameListView> ViewController::getGameListView(SystemData* syste
 		view = std::shared_ptr<IGameListView>(new DetailedGameListView(mWindow, system->getRootFolder()));
 	else
 		view = std::shared_ptr<IGameListView>(new BasicGameListView(mWindow, system->getRootFolder()));
-
-	// uncomment for experimental "image grid" view
-	//view = std::shared_ptr<IGameListView>(new GridGameListView(mWindow, system->getRootFolder()));
 
 	view->setTheme(system->getTheme());
 
