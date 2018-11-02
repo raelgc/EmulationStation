@@ -109,6 +109,19 @@ std::map< std::string, ElementMapType > ThemeData::sElementMap = boost::assign::
 		("iconColor", COLOR)
 		("fontPath", PATH)
 		("fontSize", FLOAT)))
+		// We don't support video, but let's not fail for video themes
+		("video", makeMap(boost::assign::map_list_of
+			("pos", NORMALIZED_PAIR)
+			("size", NORMALIZED_PAIR)
+			("maxSize", NORMALIZED_PAIR)
+			("origin", NORMALIZED_PAIR)
+			("rotation", FLOAT)
+			("rotationOrigin", NORMALIZED_PAIR)
+			("default", PATH)
+			("delay", FLOAT)
+			("zIndex", FLOAT)
+			("showSnapshotNoVideo", BOOLEAN)
+			("showSnapshotDelay", BOOLEAN)))
 	("carousel", makeMap(boost::assign::map_list_of
 		("type", STRING)
 		("size", NORMALIZED_PAIR)
