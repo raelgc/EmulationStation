@@ -40,7 +40,7 @@ size_t Font::getNextCursor(const std::string& str, size_t cursor)
 	else
 	{
 		// error, invalid utf8 string
-		
+
 		// if this assert is tripped, the cursor is in the middle of a utf8 code point
 		assert((c & 0xC0) != 0x80); // character is 10xxxxxx
 
@@ -141,7 +141,7 @@ Font::FontFace::FontFace(ResourceData&& d, int size) : data(d)
 {
 	int err = FT_New_Memory_Face(sLibrary, data.ptr.get(), data.length, 0, &face);
 	assert(!err);
-	
+
 	if(!err)
 		FT_Set_Pixel_Sizes(face, 0, size);
 }
@@ -165,10 +165,10 @@ void Font::initLibrary()
 size_t Font::getMemUsage() const
 {
 	size_t memUsage = 0;
-	for(auto it = mTextures.begin(); it != mTextures.end(); it++)
+	for(auto it = mTextures.cbegin(); it != mTextures.cend(); it++)
 		memUsage += it->textureSize.x() * it->textureSize.y() * 4;
 
-	for(auto it = mFaceCache.begin(); it != mFaceCache.end(); it++)
+	for(auto it = mFaceCache.cbegin(); it != mFaceCache.cend(); it++)
 		memUsage += it->second->data.length;
 
 	return memUsage;
@@ -178,8 +178,8 @@ size_t Font::getTotalMemUsage()
 {
 	size_t total = 0;
 
-	auto it = sFontMap.begin();
-	while(it != sFontMap.end())
+	auto it = sFontMap.cbegin();
+	while(it != sFontMap.cend())
 	{
 		if(it->second.expired())
 		{
@@ -197,7 +197,7 @@ size_t Font::getTotalMemUsage()
 Font::Font(int size, const std::string& path) : mSize(size), mPath(path)
 {
 	assert(mSize > 0);
-	
+
 	mMaxGlyphHeight = 0;
 
 	if(!sLibrary)
@@ -231,7 +231,7 @@ std::shared_ptr<Font> Font::get(int size, const std::string& path)
 
 	std::pair<std::string, int> def(canonicalPath.empty() ? getDefaultPath() : canonicalPath, size);
 	auto foundFont = sFontMap.find(def);
-	if(foundFont != sFontMap.end())
+	if(foundFont != sFontMap.cend())
 	{
 		if(!foundFont->second.expired())
 			return foundFont->second.lock();
@@ -339,7 +339,7 @@ void Font::getTextureForNewGlyph(const Eigen::Vector2i& glyphSize, FontTexture*&
 	mTextures.push_back(FontTexture());
 	tex_out = &mTextures.back();
 	tex_out->initTexture();
-	
+
 	bool ok = tex_out->findEmpty(glyphSize, cursor_out);
 	if(!ok)
 	{
@@ -410,7 +410,7 @@ FT_Face Font::getFaceForChar(UnicodeChar id)
 	{
 		auto fit = mFaceCache.find(i);
 
-		if(fit == mFaceCache.end()) // doesn't exist yet
+		if(fit == mFaceCache.cend()) // doesn't exist yet
 		{
 			// i == 0 -> mPath
 			// otherwise, take from fallbackFonts
@@ -425,7 +425,7 @@ FT_Face Font::getFaceForChar(UnicodeChar id)
 	}
 
 	// nothing has a valid glyph - return the "real" face so we get a "missing" character
-	return mFaceCache.begin()->second->face;
+	return mFaceCache.cbegin()->second->face;
 }
 
 void Font::clearFaceCache()
@@ -437,7 +437,7 @@ Font::Glyph* Font::getGlyph(UnicodeChar id)
 {
 	// is it already loaded?
 	auto it = mGlyphMap.find(id);
-	if(it != mGlyphMap.end())
+	if(it != mGlyphMap.cend())
 		return &it->second;
 
 	// nope, need to make a glyph
@@ -471,7 +471,7 @@ Font::Glyph* Font::getGlyph(UnicodeChar id)
 
 	// create glyph
 	Glyph& glyph = mGlyphMap[id];
-	
+
 	glyph.texture = tex;
 	glyph.texPos << cursor.x() / (float)tex->textureSize.x(), cursor.y() / (float)tex->textureSize.y();
 	glyph.texSize << glyphSize.x() / (float)tex->textureSize.x(), glyphSize.y() / (float)tex->textureSize.y();
@@ -502,7 +502,7 @@ void Font::rebuildTextures()
 	}
 
 	// reupload the texture data
-	for(auto it = mGlyphMap.begin(); it != mGlyphMap.end(); it++)
+	for(auto it = mGlyphMap.cbegin(); it != mGlyphMap.cend(); it++)
 	{
 		FT_Face face = getFaceForChar(it->first);
 		FT_GlyphSlot glyphSlot = face->glyph;
@@ -511,11 +511,11 @@ void Font::rebuildTextures()
 		FT_Load_Char(face, it->first, FT_LOAD_RENDER);
 
 		FontTexture* tex = it->second.texture;
-		
+
 		// find the position/size
 		Eigen::Vector2i cursor(it->second.texPos.x() * tex->textureSize.x(), it->second.texPos.y() * tex->textureSize.y());
 		Eigen::Vector2i glyphSize(it->second.texSize.x() * tex->textureSize.x(), it->second.texSize.y() * tex->textureSize.y());
-		
+
 		// upload to texture
 		glBindTexture(GL_TEXTURE_2D, tex->textureId);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, cursor.x(), cursor.y(), glyphSize.x(), glyphSize.y(), GL_ALPHA, GL_UNSIGNED_BYTE, glyphSlot->bitmap.buffer);
@@ -532,7 +532,7 @@ void Font::renderTextCache(TextCache* cache)
 		return;
 	}
 
-	for(auto it = cache->vertexLists.begin(); it != cache->vertexLists.end(); it++)
+	for(auto it = cache->vertexLists.cbegin(); it != cache->vertexLists.cend(); it++)
 	{
 		assert(*it->textureIdPtr != 0);
 
@@ -729,7 +729,7 @@ inline float font_round(float v)
 TextCache* Font::buildTextCache(const std::string& text, Eigen::Vector2f offset, unsigned int color, float xLen, Alignment alignment, float lineSpacing)
 {
 	float x = offset[0] + (xLen != 0 ? getNewlineStartOffset(text, 0, xLen, alignment) : 0);
-	
+
 	float yTop = getGlyph((UnicodeChar)'S')->bearing.y();
 	float yBot = getHeight(lineSpacing);
 	float y = offset[1] + (yBot + yTop)/2.0f;
@@ -802,7 +802,7 @@ TextCache* Font::buildTextCache(const std::string& text, Eigen::Vector2f offset,
 	cache->metrics = { sizeText(text, lineSpacing) };
 
 	unsigned int i = 0;
-	for(auto it = vertMap.begin(); it != vertMap.end(); it++)
+	for(auto it = vertMap.cbegin(); it != vertMap.cend(); it++)
 	{
 		TextCache::VertexList& vertList = cache->vertexLists.at(i);
 
@@ -834,13 +834,13 @@ std::shared_ptr<Font> Font::getFromTheme(const ThemeData::ThemeElement* elem, un
 	using namespace ThemeFlags;
 	if(!(properties & FONT_PATH) && !(properties & FONT_SIZE))
 		return orig;
-	
+
 	std::shared_ptr<Font> font;
 	int size = (orig ? orig->mSize : FONT_SIZE_MEDIUM);
 	std::string path = (orig ? orig->mPath : getDefaultPath());
 
 	float sh = (float)Renderer::getScreenHeight();
-	if(properties & FONT_SIZE && elem->has("fontSize")) 
+	if(properties & FONT_SIZE && elem->has("fontSize"))
 		size = (int)(sh * elem->get<float>("fontSize"));
 	if(properties & FONT_PATH && elem->has("fontPath"))
 		path = elem->get<std::string>("fontPath");

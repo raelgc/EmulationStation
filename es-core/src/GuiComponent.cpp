@@ -183,7 +183,7 @@ void GuiComponent::removeChild(GuiComponent* cmp)
 
 	cmp->setParent(NULL);
 
-	for(auto i = mChildren.begin(); i != mChildren.end(); i++)
+	for(auto i = mChildren.cbegin(); i != mChildren.cend(); i++)
 	{
 		if(*i == cmp)
 		{
@@ -200,7 +200,7 @@ void GuiComponent::clearChildren()
 
 void GuiComponent::sortChildren()
 {
-	std::stable_sort(mChildren.begin(), mChildren.end(),  [](GuiComponent* a, GuiComponent* b) {
+	std::stable_sort(mChildren.begin(), mChildren.end(), [](GuiComponent* a, GuiComponent* b) {
 		return b->getZIndex() > a->getZIndex();
 	});
 }
@@ -233,7 +233,7 @@ unsigned char GuiComponent::getOpacity() const
 void GuiComponent::setOpacity(unsigned char opacity)
 {
 	mOpacity = opacity;
-	for(auto it = mChildren.begin(); it != mChildren.end(); it++)
+	for(auto it = mChildren.cbegin(); it != mChildren.cend(); it++)
 	{
 		(*it)->setOpacity(opacity);
 	}
@@ -279,7 +279,7 @@ std::string GuiComponent::getValue() const
 
 void GuiComponent::textInput(const char* text)
 {
-	for(auto iter = mChildren.begin(); iter != mChildren.end(); iter++)
+	for(auto iter = mChildren.cbegin(); iter != mChildren.cend(); iter++)
 	{
 		(*iter)->textInput(text);
 	}

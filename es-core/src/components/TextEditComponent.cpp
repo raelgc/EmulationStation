@@ -62,7 +62,7 @@ void TextEditComponent::textInput(const char* text)
 			if(mCursor > 0)
 			{
 				size_t newCursor = Font::getPrevCursor(mText, mCursor);
-				mText.erase(mText.begin() + newCursor, mText.begin() + mCursor);
+				mText.erase(mText.cbegin() + newCursor, mText.cbegin() + mCursor);
 				mCursor = newCursor;
 			}
 		}else{

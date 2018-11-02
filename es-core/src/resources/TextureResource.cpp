@@ -113,7 +113,7 @@ std::shared_ptr<TextureResource> TextureResource::get(const std::string& path, b
 
 	TextureKeyType key(canonicalPath, tile);
 	auto foundTexture = sTextureMap.find(key);
-	if(foundTexture != sTextureMap.end())
+	if(foundTexture != sTextureMap.cend())
 	{
 		if(!foundTexture->second.expired())
 			return foundTexture->second.lock();
@@ -160,8 +160,8 @@ size_t TextureResource::getTotalMemUsage()
 {
 	size_t total = 0;
 
-	auto it = sTextureList.begin();
-	while(it != sTextureList.end())
+	auto it = sTextureList.cbegin();
+	while(it != sTextureList.cend())
 	{
 		if((*it).expired())
 		{

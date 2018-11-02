@@ -26,7 +26,7 @@ public:
 	inline const std::string& getThemeFolder() const { return mThemeFolder; }
 
 	inline const std::vector<PlatformIds::PlatformId>& getPlatformIds() const { return mPlatformIds; }
-	inline bool hasPlatformId(PlatformIds::PlatformId id) { return std::find(mPlatformIds.begin(), mPlatformIds.end(), id) != mPlatformIds.end(); }
+	inline bool hasPlatformId(PlatformIds::PlatformId id) { return std::find(mPlatformIds.cbegin(), mPlatformIds.cend(), id) != mPlatformIds.cend(); }
 
 	inline const std::shared_ptr<ThemeData>& getTheme() const { return mTheme; }
 
@@ -46,14 +46,14 @@ public:
 
 	static std::vector<SystemData*> sSystemVector;
 
-	inline std::vector<SystemData*>::const_iterator getIterator() const { return std::find(sSystemVector.begin(), sSystemVector.end(), this); };
+	inline std::vector<SystemData*>::const_iterator getIterator() const { return std::find(sSystemVector.cbegin(), sSystemVector.cend(), this); };
 	inline std::vector<SystemData*>::const_reverse_iterator getRevIterator() const { return std::find(sSystemVector.rbegin(), sSystemVector.rend(), this); };
 
 	inline SystemData* getNext() const
 	{
 		auto it = getIterator();
 		it++;
-		if(it == sSystemVector.end()) it = sSystemVector.begin();
+		if(it == sSystemVector.cend()) it = sSystemVector.cbegin();
 		return *it;
 	}
 

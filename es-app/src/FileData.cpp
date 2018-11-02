@@ -110,7 +110,7 @@ std::vector<FileData*> FileData::getFilesRecursive(unsigned int typeMask) const
 {
 	std::vector<FileData*> out;
 
-	for(auto it = mChildren.begin(); it != mChildren.end(); it++)
+	for(auto it = mChildren.cbegin(); it != mChildren.cend(); it++)
 	{
 		if((*it)->getType() & typeMask)
 			out.push_back(*it);
@@ -118,7 +118,7 @@ std::vector<FileData*> FileData::getFilesRecursive(unsigned int typeMask) const
 		if((*it)->getChildren().size() > 0)
 		{
 			std::vector<FileData*> subchildren = (*it)->getFilesRecursive(typeMask);
-			out.insert(out.end(), subchildren.cbegin(), subchildren.cend());
+			out.insert(out.cend(), subchildren.cbegin(), subchildren.cend());
 		}
 	}
 
@@ -131,7 +131,7 @@ void FileData::addChild(FileData* file)
 	assert(file->getParent() == NULL);
 
 	const std::string key = file->getPath().filename().string();
-	if (mChildrenByFilename.find(key) == mChildrenByFilename.end())
+	if (mChildrenByFilename.find(key) == mChildrenByFilename.cend())
 	{
 		mChildrenByFilename[key] = file;
 		mChildren.push_back(file);
@@ -144,7 +144,7 @@ void FileData::removeChild(FileData* file)
 	assert(mType == FOLDER);
 	assert(file->getParent() == this);
 	mChildrenByFilename.erase(file->getPath().filename().string());
-	for(auto it = mChildren.begin(); it != mChildren.end(); it++)
+	for(auto it = mChildren.cbegin(); it != mChildren.cend(); it++)
 	{
 		if(*it == file)
 		{
@@ -162,7 +162,7 @@ void FileData::sort(ComparisonFunction& comparator, bool ascending)
 {
 	std::sort(mChildren.begin(), mChildren.end(), comparator);
 
-	for(auto it = mChildren.begin(); it != mChildren.end(); it++)
+	for(auto it = mChildren.cbegin(); it != mChildren.cend(); it++)
 	{
 		if((*it)->getChildren().size() > 0)
 			(*it)->sort(comparator, ascending);

@@ -48,7 +48,7 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 				transitions.push_back("PCM");
 				transitions.push_back("Speaker");
 				transitions.push_back("Master");
-				for(auto it = transitions.begin(); it != transitions.end(); it++)
+				for(auto it = transitions.cbegin(); it != transitions.cend(); it++)
 					vol_dev->add(*it, *it, Settings::getInstance()->getString("AudioDevice") == *it);
 				s->addWithLabel("AUDIO DEVICE", vol_dev);
 				s->addSaveFunc([vol_dev] {
@@ -82,7 +82,7 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 			std::vector<std::string> screensavers;
 			screensavers.push_back("dim");
 			screensavers.push_back("black");
-			for(auto it = screensavers.begin(); it != screensavers.end(); it++)
+			for(auto it = screensavers.cbegin(); it != screensavers.cend(); it++)
 				screensaver_behavior->add(*it, *it, Settings::getInstance()->getString("ScreenSaverBehavior") == *it);
 			s->addWithLabel("SCREENSAVER BEHAVIOR", screensaver_behavior);
 			s->addSaveFunc([screensaver_behavior] { Settings::getInstance()->setString("ScreenSaverBehavior", screensaver_behavior->getSelected()); });
@@ -117,7 +117,7 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 			transitions.push_back("fade");
 			transitions.push_back("slide");
 			transitions.push_back("instant");
-			for(auto it = transitions.begin(); it != transitions.end(); it++)
+			for(auto it = transitions.cbegin(); it != transitions.cend(); it++)
 				transition_style->add(*it, *it, Settings::getInstance()->getString("TransitionStyle") == *it);
 			s->addWithLabel("TRANSITION STYLE", transition_style);
 			s->addSaveFunc([transition_style] { Settings::getInstance()->setString("TransitionStyle", transition_style->getSelected()); });

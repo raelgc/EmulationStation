@@ -152,7 +152,7 @@ void SystemData::populateFolder(FileData* folder)
 		//see issue #75: https://github.com/Aloshi/EmulationStation/issues/75
 
 		isGame = false;
-		if(std::find(mSearchExtensions.begin(), mSearchExtensions.end(), extension) != mSearchExtensions.end())
+		if(std::find(mSearchExtensions.cbegin(), mSearchExtensions.cend(), extension) != mSearchExtensions.cend())
 		{
 			// skip hidden files
 			if(isHidden(filePath))
@@ -247,7 +247,7 @@ bool SystemData::loadConfig()
 		const char* platformList = system.child("platform").text().get();
 		std::vector<std::string> platformStrs = readList(platformList);
 		std::vector<PlatformIds::PlatformId> platformIds;
-		for(auto it = platformStrs.begin(); it != platformStrs.end(); it++)
+		for(auto it = platformStrs.cbegin(); it != platformStrs.cend(); it++)
 		{
 			const char* str = it->c_str();
 			PlatformIds::PlatformId platformId = PlatformIds::getPlatformId(str);
