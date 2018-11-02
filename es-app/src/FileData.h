@@ -28,9 +28,6 @@ enum FileChangeType
 const char* fileTypeToString(FileType type);
 FileType stringToFileType(const char* str);
 
-// Remove (.*) and [.*] from str
-std::string removeParenthesis(const std::string& str);
-
 // A tree node that holds information for a file.
 class FileData
 {

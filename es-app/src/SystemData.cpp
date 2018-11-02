@@ -61,49 +61,6 @@ SystemData::~SystemData()
 	delete mRootFolder;
 }
 
-
-std::string strreplace(std::string str, const std::string& replace, const std::string& with)
-{
-	size_t pos;
-	while((pos = str.find(replace)) != std::string::npos)
-		str = str.replace(pos, replace.length(), with.c_str(), with.length());
-
-	return str;
-}
-
-// plaform-specific escape path function
-// on windows: just puts the path in quotes
-// everything else: assume bash and escape special characters with backslashes
-std::string escapePath(const boost::filesystem::path& path)
-{
-#ifdef WIN32
-	// windows escapes stuff by just putting everything in quotes
-	return '"' + fs::path(path).make_preferred().string() + '"';
-#else
-	// a quick and dirty way to insert a backslash before most characters that would mess up a bash path
-	std::string pathStr = path.string();
-
-	const char* invalidChars = " '\"\\!$^&*(){}[]?;<>";
-	for(unsigned int i = 0; i < pathStr.length(); i++)
-	{
-		char c;
-		unsigned int charNum = 0;
-		do {
-			c = invalidChars[charNum];
-			if(pathStr[i] == c)
-			{
-				pathStr.insert(i, "\\");
-				i++;
-				break;
-			}
-			charNum++;
-		} while(c != '\0');
-	}
-
-	return pathStr;
-#endif
-}
-
 void SystemData::launchGame(Window* window, FileData* game)
 {
 	LOG(LogInfo) << "Attempting to launch game...";

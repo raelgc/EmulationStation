@@ -37,4 +37,11 @@ boost::filesystem::path resolvePath(const boost::filesystem::path& path, const b
 
 boost::posix_time::ptime string_to_ptime(const std::string& str, const std::string& fmt = "%Y%m%dT%H%M%S%F%q");
 
+std::string escapePath(const boost::filesystem::path& path);
+
+std::string strreplace(std::string str, const std::string& replace, const std::string& with);
+
+// Remove (.*) and [.*] from str
+std::string removeParenthesis(const std::string& str);
+
 #endif // ES_CORE_UTIL_H

@@ -1,47 +1,8 @@
 #include "FileData.h"
 #include "SystemData.h"
+#include "Util.h"
 
 namespace fs = boost::filesystem;
-
-std::string removeParenthesis(const std::string& str)
-{
-	// remove anything in parenthesis or brackets
-	// should be roughly equivalent to the regex replace "\((.*)\)|\[(.*)\]" with ""
-	// I would love to just use regex, but it's not worth pulling in another boost lib for one function that is used once
-
-	std::string ret = str;
-	size_t start, end;
-
-	static const int NUM_TO_REPLACE = 2;
-	static const char toReplace[NUM_TO_REPLACE*2] = { '(', ')', '[', ']' };
-
-	bool done = false;
-	while(!done)
-	{
-		done = true;
-		for(int i = 0; i < NUM_TO_REPLACE; i++)
-		{
-			end = ret.find_first_of(toReplace[i*2+1]);
-			start = ret.find_last_of(toReplace[i*2], end);
-
-			if(start != std::string::npos && end != std::string::npos)
-			{
-				ret.erase(start, end - start + 1);
-				done = false;
-			}
-		}
-	}
-
-	// also strip whitespace
-	end = ret.find_last_not_of(' ');
-	if(end != std::string::npos)
-		end++;
-
-	ret = ret.substr(0, end);
-
-	return ret;
-}
-
 
 FileData::FileData(FileType type, const fs::path& path, SystemData* system)
 	: mType(type), mPath(path), mSystem(system), mParent(NULL), metadata(type == GAME ? GAME_METADATA : FOLDER_METADATA) // metadata is REALLY set in the constructor!

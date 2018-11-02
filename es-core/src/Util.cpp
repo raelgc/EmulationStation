@@ -208,3 +208,84 @@ boost::posix_time::ptime string_to_ptime(const std::string& str, const std::stri
 
 	return time;
 }
+
+std::string strreplace(std::string str, const std::string& replace, const std::string& with)
+{
+	size_t pos;
+	while((pos = str.find(replace)) != std::string::npos)
+		str = str.replace(pos, replace.length(), with.c_str(), with.length());
+
+	return str;
+}
+
+// plaform-specific escape path function
+// on windows: just puts the path in quotes
+// everything else: assume bash and escape special characters with backslashes
+std::string escapePath(const boost::filesystem::path& path)
+{
+#ifdef WIN32
+	// windows escapes stuff by just putting everything in quotes
+	return '"' + fs::path(path).make_preferred().string() + '"';
+#else
+	// a quick and dirty way to insert a backslash before most characters that would mess up a bash path
+	std::string pathStr = path.string();
+
+	const char* invalidChars = " '\"\\!$^&*(){}[]?;<>";
+	for(unsigned int i = 0; i < pathStr.length(); i++)
+	{
+		char c;
+		unsigned int charNum = 0;
+		do {
+			c = invalidChars[charNum];
+			if(pathStr[i] == c)
+			{
+				pathStr.insert(i, "\\");
+				i++;
+				break;
+			}
+			charNum++;
+		} while(c != '\0');
+	}
+
+	return pathStr;
+#endif
+}
+
+std::string removeParenthesis(const std::string& str)
+{
+	// remove anything in parenthesis or brackets
+	// should be roughly equivalent to the regex replace "\((.*)\)|\[(.*)\]" with ""
+	// I would love to just use regex, but it's not worth pulling in another boost lib for one function that is used once
+
+	std::string ret = str;
+	size_t start, end;
+
+	static const int NUM_TO_REPLACE = 2;
+	static const char toReplace[NUM_TO_REPLACE*2] = { '(', ')', '[', ']' };
+
+	bool done = false;
+	while(!done)
+	{
+		done = true;
+		for(int i = 0; i < NUM_TO_REPLACE; i++)
+		{
+			end = ret.find_first_of(toReplace[i*2+1]);
+			start = ret.find_last_of(toReplace[i*2], end);
+
+			if(start != std::string::npos && end != std::string::npos)
+			{
+				ret.erase(start, end - start + 1);
+				done = false;
+			}
+		}
+	}
+
+	// also strip whitespace
+	end = ret.find_last_not_of(' ');
+	if(end != std::string::npos)
+		end++;
+
+	ret = ret.substr(0, end);
+
+	return ret;
+}

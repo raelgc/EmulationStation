@@ -9,6 +9,7 @@
 #include "MetaData.h"
 #include "PlatformId.h"
 #include "ThemeData.h"
+#include "Util.h"
 
 class SystemData
 {
