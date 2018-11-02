@@ -26,8 +26,6 @@
 
 namespace fs = boost::filesystem;
 
-bool scrape_cmdline = false;
-
 bool parseArgs(int argc, char* argv[], unsigned int* width, unsigned int* height)
 {
 	for(int i = 1; i < argc; i++)
@@ -71,9 +69,6 @@ bool parseArgs(int argc, char* argv[], unsigned int* width, unsigned int* height
 			bool vsync = (strcmp(argv[i + 1], "on") == 0 || strcmp(argv[i + 1], "1") == 0) ? true : false;
 			Settings::getInstance()->setBool("VSync", vsync);
 			i++; // skip vsync value
-		}else if(strcmp(argv[i], "--scrape") == 0)
-		{
-			scrape_cmdline = true;
 		}else if(strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-h") == 0)
 		{
 #ifdef WIN32
@@ -96,7 +91,6 @@ bool parseArgs(int argc, char* argv[], unsigned int* width, unsigned int* height
 				"--no-exit			don't show the exit option in the menu\n"
 				"--no-splash			don't show the splash screen\n"
 				"--debug				more logging, show console on Windows\n"
-				"--scrape			scrape using command line interface\n"
 				"--windowed			not fullscreen, should be used with --resolution\n"
 				"--vsync [1/on or 0/off]		turn vsync on or off (default is on)\n"
 				"--help, -h			summon a sentient, angry tuba\n\n"
@@ -224,20 +218,17 @@ int main(int argc, char* argv[])
 	ViewController::init(&window);
 	window.pushGui(ViewController::get());
 
-	if(!scrape_cmdline)
+	if(!window.init(width, height))
 	{
-		if(!window.init(width, height))
-		{
-			LOG(LogError) << "Window failed to initialize!";
-			return 1;
-		}
-
-		std::string glExts = (const char*)glGetString(GL_EXTENSIONS);
-		LOG(LogInfo) << "Checking available OpenGL extensions...";
-		LOG(LogInfo) << " ARB_texture_non_power_of_two: " << (glExts.find("ARB_texture_non_power_of_two") != std::string::npos ? "ok" : "MISSING");
-		if(Settings::getInstance()->getBool("SplashScreen"))
-			window.renderLoadingScreen();
+		LOG(LogError) << "Window failed to initialize!";
+		return 1;
 	}
+
+	std::string glExts = (const char*)glGetString(GL_EXTENSIONS);
+	LOG(LogInfo) << "Checking available OpenGL extensions...";
+	LOG(LogInfo) << " ARB_texture_non_power_of_two: " << (glExts.find("ARB_texture_non_power_of_two") != std::string::npos ? "ok" : "MISSING");
+	if(Settings::getInstance()->getBool("SplashScreen"))
+		window.renderLoadingScreen();
 
 	const char* errorMsg = NULL;
 	if(!loadSystemConfigFile(&errorMsg))
@@ -246,8 +237,7 @@ int main(int argc, char* argv[])
 		if(errorMsg == NULL)
 		{
 			LOG(LogError) << "Unknown error occured while parsing system config file.";
-			if(!scrape_cmdline)
-				Renderer::deinit();
+			Renderer::deinit();
 			return 1;
 		}
 
