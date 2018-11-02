@@ -28,6 +28,9 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 
 	// [version]
 
+	if(Settings::getInstance()->getBool("ForceKiosk"))
+		return;
+
 	addEntry("SOUND SETTINGS", 0x777777FF, true,
 		[this] {
 			auto s = new GuiSettings(mWindow, "SOUND SETTINGS");
@@ -199,20 +202,17 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 			row.addElement(std::make_shared<TextComponent>(window, "SHUTDOWN SYSTEM", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 			s->addRow(row);
 
-			if(Settings::getInstance()->getBool("ShowExit"))
-			{
-				row.elements.clear();
-				row.makeAcceptInputHandler([window] {
-					window->pushGui(new GuiMsgBox(window, "REALLY QUIT?", "YES",
-					[] {
-						SDL_Event ev;
-						ev.type = SDL_QUIT;
-						SDL_PushEvent(&ev);
-					}, "NO", nullptr));
-				});
-				row.addElement(std::make_shared<TextComponent>(window, "QUIT EMULATIONSTATION", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
-				s->addRow(row);
-			}
+			row.elements.clear();
+			row.makeAcceptInputHandler([window] {
+				window->pushGui(new GuiMsgBox(window, "REALLY QUIT?", "YES",
+				[] {
+					SDL_Event ev;
+					ev.type = SDL_QUIT;
+					SDL_PushEvent(&ev);
+				}, "NO", nullptr));
+			});
+			row.addElement(std::make_shared<TextComponent>(window, "QUIT EMULATIONSTATION", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+			s->addRow(row);
 
 			mWindow->pushGui(s);
 	});

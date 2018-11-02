@@ -108,10 +108,11 @@ You can use `--help` or `-h` to view a list of command-line options. Briefly out
 --gamelist-only		- only display games defined in a gamelist.xml file.
 --ignore-gamelist	- do not parse any gamelist.xml files.
 --draw-framerate	- draw the framerate.
---no-exit		- do not display 'exit' in the ES menu.
 --debug			- show the console window on Windows, do slightly more logging
 --windowed	- run ES in a window, works best in conjunction with --resolution [w] [h].
 --vsync [1/on or 0/off]	- turn vsync on or off (default is on).
+--no-splash		- don't show the splash screen.
+--force-kiosk		- don't show any configuration menu, including exit.
 ```
 
 As long as ES hasn't frozen, you can always press F4 to close the application.
