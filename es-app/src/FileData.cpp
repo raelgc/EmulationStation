@@ -36,17 +36,74 @@ std::string FileData::getCleanName() const
 
 const std::string FileData::getThumbnailPath() const
 {
-	return metadata.get("thumbnail");
+	std::string thumbnail = metadata.get("thumbnail");
+
+	// no thumbnail, try image
+	if(thumbnail.empty())
+	{
+		thumbnail = metadata.get("image");
+
+		// no image, try to use local image
+		if(thumbnail.empty())
+		{
+			const char* extList[2] = { ".png", ".jpg" };
+			for(int i = 0; i < 2; i++)
+			{
+				if(thumbnail.empty())
+				{
+					std::string path = mPath.stem().generic_string() + "/images/" + getDisplayName() + "-image" + extList[i];
+					if(boost::filesystem::exists(path))
+						thumbnail = path;
+				}
+			}
+		}
+	}
+
+	return thumbnail;
 }
 
 const std::string FileData::getMarqueePath() const
 {
-	return metadata.get("marquee");
+	std::string marquee = metadata.get("marquee");
+
+	// no marquee, try to use local marquee
+	if(marquee.empty())
+	{
+		const char* extList[2] = { ".png", ".jpg" };
+		for(int i = 0; i < 2; i++)
+		{
+			if(marquee.empty())
+			{
+				std::string path = mPath.stem().generic_string() + "/images/" + getDisplayName() + "-marquee" + extList[i];
+				if(boost::filesystem::exists(path))
+					marquee = path;
+			}
+		}
+	}
+
+	return marquee;
 }
 
 const std::string FileData::getImagePath() const
 {
-	return metadata.get("image");
+	std::string image = metadata.get("image");
+
+	// no image, try to use local image
+	if(image.empty())
+	{
+		const char* extList[2] = { ".png", ".jpg" };
+		for(int i = 0; i < 2; i++)
+		{
+			if(image.empty())
+			{
+				std::string path = mPath.stem().generic_string() + "/images/" + getDisplayName() + "-image" + extList[i];
+				if(boost::filesystem::exists(path))
+					image = path;
+			}
+		}
+	}
+
+	return image;
 }
 
 std::vector<FileData*> FileData::getFilesRecursive(unsigned int typeMask) const
