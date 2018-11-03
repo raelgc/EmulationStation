@@ -18,6 +18,11 @@ public:
 
 private:
 	void addEntry(const char* name, unsigned int color, bool add_arrow, const std::function<void()>& func);
+	void addVersionInfo();
+	void openConfigInput();
+	void openQuitMenu();
+	void openSoundSettings();
+	void openUISettings();
 
 	MenuComponent mMenu;
 	TextComponent mVersion;
