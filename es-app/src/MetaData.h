@@ -15,10 +15,11 @@ enum MetaDataType
 	MD_STRING,
 	MD_INT,
 	MD_FLOAT,
+	MD_BOOL,
 
 	//specialized types
 	MD_MULTILINE_STRING,
-	MD_IMAGE_PATH,
+	MD_PATH,
 	MD_RATING,
 	MD_DATE,
 	MD_TIME //used for lastplayed
