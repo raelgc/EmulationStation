@@ -44,4 +44,6 @@ std::string strreplace(std::string str, const std::string& replace, const std::s
 // Remove (.*) and [.*] from str
 std::string removeParenthesis(const std::string& str);
 
+const bool any_of(const std::vector<std::string> list, const std::string& element);
+
 #endif // ES_CORE_UTIL_H

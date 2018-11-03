@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "Util.h"
 #include "resources/ResourceManager.h"
 #include "platform.h"
@@ -288,4 +289,9 @@ std::string removeParenthesis(const std::string& str)
 	ret = ret.substr(0, end);
 
 	return ret;
+}
+
+const bool any_of(const std::vector<std::string> list, const std::string& element)
+{
+  return (std::find(list.cbegin(), list.cend(), element) != list.cend());
 }

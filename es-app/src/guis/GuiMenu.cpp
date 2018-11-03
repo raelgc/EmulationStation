@@ -56,8 +56,12 @@ void GuiMenu::openUISettings()
 	std::vector<std::string> screensavers;
 	screensavers.push_back("dim");
 	screensavers.push_back("black");
+	auto saved_screensaver_behavior = Settings::getInstance()->getString("ScreenSaverBehavior");
+	// if a non supported screensaver was saved, fallback to default
+	if (!any_of(screensavers, saved_screensaver_behavior))
+		saved_screensaver_behavior = screensavers.at(0);
 	for(auto it = screensavers.cbegin(); it != screensavers.cend(); it++)
-		screensaver_behavior->add(*it, *it, Settings::getInstance()->getString("ScreenSaverBehavior") == *it);
+		screensaver_behavior->add(*it, *it, saved_screensaver_behavior == *it);
 	s->addWithLabel("SCREENSAVER BEHAVIOR", screensaver_behavior);
 	s->addSaveFunc([screensaver_behavior] { Settings::getInstance()->setString("ScreenSaverBehavior", screensaver_behavior->getSelected()); });
 	// framerate
