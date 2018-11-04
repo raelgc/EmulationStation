@@ -2,7 +2,7 @@
 #ifndef ES_APP_META_DATA_H
 #define ES_APP_META_DATA_H
 
-#include "pugixml/pugixml.hpp"
+#include <pugixml.hpp>
 #include <string>
 #include <map>
 #include "GuiComponent.h"

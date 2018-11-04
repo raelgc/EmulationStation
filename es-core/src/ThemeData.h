@@ -12,7 +12,7 @@
 #include <boost/variant.hpp>
 #include <boost/xpressive/xpressive.hpp>
 #include <Eigen/Dense>
-#include "pugixml/pugixml.hpp"
+#include <pugixml.hpp>
 #include "GuiComponent.h"
 
 template<typename T>

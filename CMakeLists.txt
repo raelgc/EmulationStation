@@ -57,6 +57,8 @@ endif()
 find_package(Eigen3 REQUIRED)
 find_package(CURL REQUIRED)
 find_package(libCEC)
+find_package(CURL REQUIRED)
+find_package(PugiXML REQUIRED)
 
 #add ALSA for Linux
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")

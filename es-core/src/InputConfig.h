@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include "pugixml/pugixml.hpp"
+#include <pugixml.hpp>
 
 #define DEVICE_KEYBOARD -1
 #define DEVICE_CEC      -2

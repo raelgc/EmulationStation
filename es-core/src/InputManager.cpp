@@ -4,7 +4,7 @@
 #include "Window.h"
 #include "CECInput.h"
 #include "Log.h"
-#include "pugixml/pugixml.hpp"
+#include <pugixml.hpp>
 #include <boost/filesystem.hpp>
 #include "platform.h"
 
