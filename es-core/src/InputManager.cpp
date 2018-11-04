@@ -2,14 +2,12 @@
 #include "InputConfig.h"
 #include "Settings.h"
 #include "Window.h"
-#include "CECInput.h"
 #include "Log.h"
 #include <pugixml.hpp>
 #include <boost/filesystem.hpp>
 #include "platform.h"
 
 #define KEYBOARD_GUID_STRING "-1"
-#define CEC_GUID_STRING      "-2"
 
 // SO HEY POTENTIAL POOR SAP WHO IS TRYING TO MAKE SENSE OF ALL THIS (by which I mean my future self)
 // There are like four distinct IDs used for joysticks (crazy, right?)
@@ -21,10 +19,6 @@
 //    This is actually just an SDL_JoystickID (also called instance ID), but -1 means "keyboard" instead of "error."
 // 4. Joystick GUID - this is some squashed version of joystick vendor, version, and a bunch of other device-specific things.
 //    It should remain the same across runs of the program/system restarts/device reordering and is what I use to identify which joystick to load.
-
-// hack for cec support
-int SDL_USER_CECBUTTONDOWN = -1;
-int SDL_USER_CECBUTTONUP   = -1;
 
 namespace fs = boost::filesystem;
 
@@ -66,12 +60,6 @@ void InputManager::init()
 
 	mKeyboardInputConfig = new InputConfig(DEVICE_KEYBOARD, "Keyboard", KEYBOARD_GUID_STRING);
 	loadInputConfig(mKeyboardInputConfig);
-
-	SDL_USER_CECBUTTONDOWN = SDL_RegisterEvents(2);
-	SDL_USER_CECBUTTONUP   = SDL_USER_CECBUTTONDOWN + 1;
-	CECInput::init();
-	mCECInputConfig = new InputConfig(DEVICE_CEC, "CEC", CEC_GUID_STRING);
-	loadInputConfig(mCECInputConfig);
 }
 
 void InputManager::addJoystickByDeviceIndex(int id)
@@ -158,14 +146,6 @@ void InputManager::deinit()
 		mKeyboardInputConfig = NULL;
 	}
 
-	if(mCECInputConfig != NULL)
-	{
-		delete mCECInputConfig;
-		mCECInputConfig = NULL;
-	}
-
-	CECInput::deinit();
-
 	SDL_JoystickEventState(SDL_DISABLE);
 	SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
 }
@@ -175,12 +155,6 @@ int InputManager::getButtonCountByDevice(SDL_JoystickID id)
 {
 	if(id == DEVICE_KEYBOARD)
 		return 120; //it's a lot, okay.
-	else if(id == DEVICE_CEC)
-#ifdef HAVE_CECLIB
-		return CEC::CEC_USER_CONTROL_CODE_MAX;
-#else // HAVE_LIBCEF
-		return 0;
-#endif // HAVE_CECLIB
 	else
 		return SDL_JoystickNumButtons(mJoysticks[id]);
 }
@@ -189,8 +163,6 @@ InputConfig* InputManager::getInputConfigByDevice(int device)
 {
 	if(device == DEVICE_KEYBOARD)
 		return mKeyboardInputConfig;
-	else if(device == DEVICE_CEC)
-		return mCECInputConfig;
 	else
 		return mInputConfigs[device];
 }
@@ -264,12 +236,6 @@ bool InputManager::parseEvent(const SDL_Event& ev, Window* window)
 	case SDL_JOYDEVICEREMOVED:
 		removeJoystickByJoystickID(ev.jdevice.which); // ev.jdevice.which is an SDL_JoystickID (instance ID)
 		return false;
-	}
-
-	if((ev.type == (unsigned int)SDL_USER_CECBUTTONDOWN) || (ev.type == (unsigned int)SDL_USER_CECBUTTONUP))
-	{
-		window->input(getInputConfigByDevice(DEVICE_CEC), Input(DEVICE_CEC, TYPE_CEC_BUTTON, ev.user.code, ev.type == (unsigned int)SDL_USER_CECBUTTONDOWN, false));
-		return true;
 	}
 
 	return false;
@@ -461,9 +427,6 @@ int InputManager::getNumConfiguredDevices()
 	if(mKeyboardInputConfig->isConfigured())
 		num++;
 
-	if(mCECInputConfig->isConfigured())
-		num++;
-
 	return num;
 }
 
@@ -471,9 +434,6 @@ std::string InputManager::getDeviceGUIDString(int deviceId)
 {
 	if(deviceId == DEVICE_KEYBOARD)
 		return KEYBOARD_GUID_STRING;
-
-	if(deviceId == DEVICE_CEC)
-		return CEC_GUID_STRING;
 
 	auto it = mJoysticks.find(deviceId);
 	if(it == mJoysticks.cend())

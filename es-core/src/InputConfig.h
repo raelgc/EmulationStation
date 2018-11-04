@@ -2,7 +2,6 @@
 #ifndef ES_CORE_INPUT_CONFIG_H
 #define ES_CORE_INPUT_CONFIG_H
 
-#include <CECInput.h>
 #include <SDL_joystick.h>
 #include <SDL_keyboard.h>
 #include <map>
@@ -12,7 +11,6 @@
 #include <pugixml.hpp>
 
 #define DEVICE_KEYBOARD -1
-#define DEVICE_CEC      -2
 
 enum InputType
 {
@@ -20,7 +18,6 @@ enum InputType
 	TYPE_BUTTON,
 	TYPE_HAT,
 	TYPE_KEY,
-	TYPE_CEC_BUTTON,
 	TYPE_COUNT
 };
 
@@ -59,11 +56,6 @@ public:
 		return "neutral?";
 	}
 
-	std::string getCECButtonName(int keycode)
-	{
-		return CECInput::getKeyCodeString(keycode);
-	}
-
 	std::string string()
 	{
 		std::stringstream stream;
@@ -80,9 +72,6 @@ public:
 				break;
 			case TYPE_KEY:
 				stream << "Key " << SDL_GetKeyName((SDL_Keycode)id);
-				break;
-			case TYPE_CEC_BUTTON:
-				stream << "CEC-Button " << getCECButtonName(id);
 				break;
 			default:
 				stream << "Input to string error";

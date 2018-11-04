@@ -19,8 +19,6 @@ std::string inputTypeToString(InputType type)
 		return "hat";
 	case TYPE_KEY:
 		return "key";
-	case TYPE_CEC_BUTTON:
-		return "cec-button";
 	default:
 		return "error";
 	}
@@ -36,8 +34,6 @@ InputType stringToInputType(const std::string& type)
 		return TYPE_HAT;
 	if(type == "key")
 		return TYPE_KEY;
-	if(type == "cec-button")
-		return TYPE_CEC_BUTTON;
 	return TYPE_COUNT;
 }
 
@@ -96,7 +92,7 @@ bool InputConfig::isMappedTo(const std::string& name, Input input)
 	Input comp;
 	if(!getInputByName(name, &comp))
 		return false;
-	
+
 	if(comp.configured && comp.type == input.type && comp.id == input.id)
 	{
 		if(comp.type == TYPE_HAT)
@@ -184,11 +180,6 @@ void InputConfig::writeToXML(pugi::xml_node parent)
 	{
 		cfg.append_attribute("type") = "keyboard";
 		cfg.append_attribute("deviceName") = "Keyboard";
-	}
-	else if(mDeviceId == DEVICE_CEC)
-	{
-		cfg.append_attribute("type") = "cec";
-		cfg.append_attribute("deviceName") = "CEC";
 	}
 	else
 	{
