@@ -1,4 +1,5 @@
 #include "FileData.h"
+#include "MameNames.h"
 #include "SystemData.h"
 #include "Util.h"
 
@@ -24,7 +25,7 @@ std::string FileData::getDisplayName() const
 {
 	std::string stem = mPath.stem().generic_string();
 	if(mSystem && mSystem->hasPlatformId(PlatformIds::ARCADE) || mSystem->hasPlatformId(PlatformIds::NEOGEO))
-		stem = PlatformIds::mameTitleSearch(stem.c_str());
+		stem = MameNames::getRealName(stem.c_str());
 
 	return stem;
 }
