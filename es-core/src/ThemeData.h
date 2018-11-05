@@ -143,6 +143,7 @@ private:
 	std::deque<boost::filesystem::path> mPaths;
 	float mVersion;
 
+	void parseFeatures(const pugi::xml_node& themeRoot);
 	void parseIncludes(const pugi::xml_node& themeRoot);
 	void parseVariables(const pugi::xml_node& root);
 	void parseViews(const pugi::xml_node& themeRoot);

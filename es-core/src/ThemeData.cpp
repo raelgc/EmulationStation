@@ -268,8 +268,28 @@ void ThemeData::parseIncludes(const pugi::xml_node& root)
 		parseVariables(theme);
 		parseIncludes(theme);
 		parseViews(theme);
+		parseFeatures(theme);
 
 		mPaths.pop_back();
+	}
+}
+
+void ThemeData::parseFeatures(const pugi::xml_node& root)
+{
+	ThemeException error;
+	error.setFiles(mPaths);
+
+	for(pugi::xml_node node = root.child("feature"); node; node = node.next_sibling("feature"))
+	{
+		if(!node.attribute("supported"))
+			throw error << "Feature missing \"supported\" attribute!";
+
+		const std::string supportedAttr = node.attribute("supported").as_string();
+
+		if (supportedAttr == "carousel" || supportedAttr == "z-index")
+		{
+			parseViews(node);
+		}
 	}
 }
 

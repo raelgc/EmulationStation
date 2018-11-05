@@ -347,7 +347,7 @@ void SystemView::render(const Eigen::Affine3f& parentTrans)
 std::vector<HelpPrompt> SystemView::getHelpPrompts()
 {
 	std::vector<HelpPrompt> prompts;
-	if (mCarousel.type == VERTICAL)
+	if (mCarousel.type == VERTICAL || mCarousel.type == VERTICAL_WHEEL)
 		prompts.push_back(HelpPrompt("up/down", "choose"));
 	else
 		prompts.push_back(HelpPrompt("left/right", "choose"));
@@ -610,7 +610,7 @@ void SystemView::getCarouselFromTheme(const ThemeData::ThemeElement* elem)
 		mCarousel.zIndex = elem->get<float>("zIndex");
 	if (elem->has("logoRotation"))
 		mCarousel.logoRotation = elem->get<float>("logoRotation");
-    if (elem->has("logoRotationOrigin"))
+  if (elem->has("logoRotationOrigin"))
 		mCarousel.logoRotationOrigin = elem->get<Eigen::Vector2f>("logoRotationOrigin");
 	if (elem->has("logoAlignment"))
 	{
