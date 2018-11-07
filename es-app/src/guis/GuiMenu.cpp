@@ -73,7 +73,7 @@ void GuiMenu::openUISettings()
 	// carousel transition option
 	auto move_carousel = std::make_shared<SwitchComponent>(mWindow);
 	move_carousel->setState(Settings::getInstance()->getBool("MoveCarousel"));
-	s->addWithLabel("CAROUSEL TRANSITIONS", move_carousel);
+	s->addWithLabel("MOVE CAROUSEL", move_carousel);
 	s->addSaveFunc([move_carousel] { Settings::getInstance()->setBool("MoveCarousel", move_carousel->getState()); });
 	// transition style
 	auto transition_style = std::make_shared< OptionListComponent<std::string> >(mWindow, "TRANSITION STYLE", false);
