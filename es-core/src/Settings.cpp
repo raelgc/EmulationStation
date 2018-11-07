@@ -17,6 +17,7 @@ std::vector<const char*> settings_dont_save {
 	{ "VSync" },
 	{ "HideConsole" },
 	{ "IgnoreGamelist" },
+	{ "ForceHandheld" },
 	{ "ForceKiosk" },
 	{ "SplashScreen" }
 };
@@ -45,6 +46,7 @@ void Settings::setDefaults()
 	mBoolMap["DrawFramerate"] = false;
 	mBoolMap["Windowed"] = false;
 	mBoolMap["SplashScreen"] = true;
+	mBoolMap["ForceHandheld"] = false;
 	mBoolMap["ForceKiosk"] = false;
 
 	mBoolMap["VSync"] = true;

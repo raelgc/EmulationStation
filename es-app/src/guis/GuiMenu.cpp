@@ -30,10 +30,17 @@ GuiMenu::GuiMenu(Window* window) : GuiComponent(window), mMenu(window, "MAIN MEN
 
 	if(!Settings::getInstance()->getBool("ForceKiosk"))
 	{
-		addEntry("UI SETTINGS", 0x777777FF, true, [this] { openUISettings(); });
+		if(!Settings::getInstance()->getBool("ForceHandheld"))
+			addEntry("UI SETTINGS", 0x777777FF, true, [this] { openUISettings(); });
 		addEntry("SOUND SETTINGS", 0x777777FF, true, [this] { openSoundSettings(); });
-		addEntry("CONFIGURE INPUT", 0x777777FF, true, [this] { openConfigInput(); });
-		addEntry("QUIT", 0x777777FF, true, [this] { openQuitMenu(); });
+		if(!Settings::getInstance()->getBool("ForceHandheld"))
+			addEntry("CONFIGURE INPUT", 0x777777FF, true, [this] { openConfigInput(); });
+		if(!Settings::getInstance()->getBool("ForceHandheld"))
+		{
+			addEntry("QUIT", 0x777777FF, true, [this] { openQuitMenu(); });
+		} else {
+			addEntry("QUIT", 0x777777FF, false, [this] { openConfirmShutdown(); });
+		}
 		addChild(&mMenu);
 		addVersionInfo();
 		addChild(&mVersion);
@@ -106,7 +113,7 @@ void GuiMenu::openUISettings()
 			theme_set->add(it->first, it->first, it == selectedSet);
 		s->addWithLabel("THEME SET", theme_set);
 		Window* window = mWindow;
-		s->addSaveFunc([window, theme_set]
+		s->addSaveFunc([theme_set]
 		{
 			bool needReload = false;
 			if(Settings::getInstance()->getString("ThemeSet") != theme_set->getSelected())
@@ -149,6 +156,17 @@ void GuiMenu::openSoundSettings()
 	s->addWithLabel("ENABLE SOUNDS", sounds_enabled);
 	s->addSaveFunc([sounds_enabled] { Settings::getInstance()->setBool("EnableSounds", sounds_enabled->getState()); });
 	mWindow->pushGui(s);
+}
+
+void GuiMenu::openConfirmShutdown()
+{
+	Window* window = mWindow;
+	window->pushGui(new GuiMsgBox(window, "REALLY SHUTDOWN?", "YES",
+		[] {
+			if(quitES("/tmp/es-shutdown") != 0)
+				LOG(LogWarning) << "Shutdown terminated with non-zero result!";
+		}, "NO", nullptr)
+	);
 }
 
 void GuiMenu::openConfigInput()
@@ -195,13 +213,7 @@ void GuiMenu::openQuitMenu()
 	row.addElement(std::make_shared<TextComponent>(window, "RESTART SYSTEM", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 	s->addRow(row);
 	row.elements.clear();
-	row.makeAcceptInputHandler([window] {
-		window->pushGui(new GuiMsgBox(window, "REALLY SHUTDOWN?", "YES",
-		[] {
-			if(quitES("/tmp/es-shutdown") != 0)
-				LOG(LogWarning) << "Shutdown terminated with non-zero result!";
-		}, "NO", nullptr));
-	});
+	row.makeAcceptInputHandler([this] { openConfirmShutdown(); });
 	row.addElement(std::make_shared<TextComponent>(window, "SHUTDOWN SYSTEM", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
 	s->addRow(row);
 	row.elements.clear();

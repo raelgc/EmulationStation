@@ -114,7 +114,8 @@ You can use `--help` or `-h` to view a list of command-line options. Briefly out
 --windowed	- run ES in a window, works best in conjunction with --resolution [w] [h].
 --vsync [1/on or 0/off]	- turn vsync on or off (default is on).
 --no-splash		- don't show the splash screen.
---force-kiosk		- don't show any configuration menu, including exit.
+--force-handheld		- hide all configurations
+--force-kiosk		- hide all configurations, don't display any menus, including exit
 ```
 
 As long as ES hasn't frozen, you can always press F4 to close the application.

@@ -52,6 +52,9 @@ bool parseArgs(int argc, char* argv[], unsigned int* width, unsigned int* height
 		}else if(strcmp(argv[i], "--force-kiosk") == 0)
 		{
 			Settings::getInstance()->setBool("ForceKiosk", true);
+		}else if(strcmp(argv[i], "--force-handheld") == 0)
+		{
+			Settings::getInstance()->setBool("ForceHandheld", true);
 		}else if(strcmp(argv[i], "--no-splash") == 0)
 		{
 			Settings::getInstance()->setBool("SplashScreen", false);
@@ -87,7 +90,8 @@ bool parseArgs(int argc, char* argv[], unsigned int* width, unsigned int* height
 				"--gamelist-only			skip automatic game search, only read from gamelist.xml\n"
 				"--ignore-gamelist		ignore the gamelist (useful for troubleshooting)\n"
 				"--draw-framerate		display the framerate\n"
-				"--force-kiosk			don't display any menus, including exit\n"
+				"--force-handheld			hide all configurations\n"
+				"--force-kiosk			hide all configurations, don't display any menus, including exit\n"
 				"--no-splash			don't show the splash screen\n"
 				"--debug				more logging, show console on Windows\n"
 				"--windowed			not fullscreen, should be used with --resolution\n"
