@@ -145,30 +145,10 @@ void Window::update(int deltaTime)
 	if(mFrameTimeElapsed > 500)
 	{
 		mAverageDeltaTime = mFrameTimeElapsed / mFrameCountElapsed;
-
-		if(Settings::getInstance()->getBool("DrawFramerate"))
-		{
-			std::stringstream ss;
-
-			// fps
-			ss << std::fixed << std::setprecision(1) << (1000.0f * (float)mFrameCountElapsed / (float)mFrameTimeElapsed) << "fps, ";
-			ss << std::fixed << std::setprecision(2) << ((float)mFrameTimeElapsed / (float)mFrameCountElapsed) << "ms";
-
-			// vram
-			float textureVramUsageMb = TextureResource::getTotalMemUsage() / 1000.0f / 1000.0f;;
-			float fontVramUsageMb = Font::getTotalMemUsage() / 1000.0f / 1000.0f;;
-			float totalVramUsageMb = textureVramUsageMb + fontVramUsageMb;
-			ss << "\nVRAM: " << totalVramUsageMb << "mb (texs: " << textureVramUsageMb << "mb, fonts: " << fontVramUsageMb << "mb)";
-
-			mFrameDataText = std::unique_ptr<TextCache>(mDefaultFonts.at(1)->buildTextCache(ss.str(), 50.f, 50.f, 0xFF00FFFF));
-		}
-
 		mFrameTimeElapsed = 0;
 		mFrameCountElapsed = 0;
 	}
-
 	mTimeSinceLastInput += deltaTime;
-
 	if(peekGui())
 		peekGui()->update(deltaTime);
 }
@@ -195,12 +175,6 @@ void Window::render()
 
 	if(!mRenderedHelpPrompts)
 		mHelp->render(transform);
-
-	if(Settings::getInstance()->getBool("DrawFramerate") && mFrameDataText)
-	{
-		Renderer::setMatrix(Eigen::Affine3f::Identity());
-		mDefaultFonts.at(1)->renderTextCache(mFrameDataText.get());
-	}
 
 	unsigned int screensaverTime = (unsigned int)Settings::getInstance()->getInt("ScreenSaverTime");
 	if(mTimeSinceLastInput >= screensaverTime && screensaverTime != 0)
