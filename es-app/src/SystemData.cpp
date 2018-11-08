@@ -238,6 +238,10 @@ bool SystemData::loadConfig()
 		fullname = system.child("fullname").text().get();
 		path = system.child("path").text().get();
 
+		// if kiosk mode, hide non system platforms, like retropie-setup
+		if(Settings::getInstance()->getBool("ForceKiosk") && !isGameSystem(name))
+			continue;
+
 		// convert extensions list from a string into a vector of strings
 		std::vector<std::string> extensions = readList(system.child("extension").text().get());
 
@@ -406,7 +410,7 @@ bool SystemData::hasGamelist() const
 
 bool SystemData::isGameSystem() const
 {
-	return (mName != "retropie");
+	return isGameSystem(mName);
 }
 
 unsigned int SystemData::getGameCount() const

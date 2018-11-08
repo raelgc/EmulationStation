@@ -33,6 +33,7 @@ public:
 	std::string getGamelistPath(bool forWrite) const;
 	bool hasGamelist() const;
 	bool isGameSystem() const;
+	inline static bool isGameSystem(const std::string& name) { return name != "retropie"; }
 	std::string getThemePath() const;
 
 	unsigned int getGameCount() const;
