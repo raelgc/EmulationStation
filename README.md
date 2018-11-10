@@ -30,14 +30,43 @@ On Kiosk mode, exit will work only with F4 or system shutdown.
 
 ## Install
 
-### Debian/Ubuntu/Raspbian
+### Retropie/Raspbian
 
-Clone this repo:
+First exit EmulationStation.
+
+Second, install required packages:
 
 ```bash
-git clone --single-branch https://github.com/raelgc/emulationstation --branch light
+sudo apt install libc6, libsdl2-2.0-0, libboost-system1.65.1, libboost-filesystem1.65.1, libfreeimage3, libfreetype6, libcurl4, libasound2, libpugixml1v5
 ```
-Install required build packages:
+
+Then download the proper binary (this is the one for Retropie based on Raspbian Stretch, check others in [Release page](https://github.com/raelgc/EmulationStation/releases/)):
+
+```bash
+wget https://github.com/raelgc/EmulationStation/releases/download/2.7.4-light/emulationstation-light-pi3-raspbian-stretch
+```
+
+Make a backup of `retropie` EmulationStation:
+
+```bash
+sudo cp /opt/retropie/supplementary/emulationstation/emulationstation /opt/retropie/supplementary/emulationstation/emulationstation.retropie.bak
+```
+
+Replace with the new one:
+
+```bash
+sudo cp emulationstation-light-pi3-raspbian-stretch /opt/retropie/supplementary/emulationstation/emulationstation
+```
+
+Done! 
+
+### Ubuntu 18.04
+
+Repeat above instructions, but using the [Ubuntu 18.04 binary](https://github.com/raelgc/EmulationStation/releases/download/2.7.4-light/emulationstation-light-amd64-ubuntu-18.04).
+
+## Building
+
+To build from source code, after clone this repo, install required build packages:
 
 ```bash
 sudo apt-get install cmake build-essential libsdl2-dev libboost-system-dev libboost-filesystem-dev libboost-date-time-dev libpugixml-dev libfreeimage-dev libfreetype6-dev libeigen3-dev libcurl4-openssl-dev libasound2-dev libgl1-mesa-dev
