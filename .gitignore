@@ -36,3 +36,10 @@ CPackSourceConfig.cmake
 .cproject
 .project
 .settings/
+
+# Binary package output
+_CPack_Packages
+*.deb
+*.tar.gz
+install_manifest.txt
+
