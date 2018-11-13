@@ -8,6 +8,8 @@ It's perfect for arcade cabinets, as it has a real kiosk mode (no config menus, 
 
 Additionally it has and a handheld mode, where config menus are hidden but sound and shutdown menu are displayed.
 
+And finally: both analogue and digital directionals will work!
+
 The builtin Scraper was removed too (it's always broken!), so you can use [the Steven Selph's Scraper scraper](https://github.com/RetroPie/RetroPie-Setup/wiki/scraper#steven-selphs-scraper) on Retropie or [Universal XML Scraper](https://github.com/Universal-Rom-Tools/Universal-XML-Scraper) on Windows.
 
 ## Usage
@@ -34,35 +36,24 @@ On Kiosk mode, exit will work only with F4 or system shutdown.
 
 First exit EmulationStation.
 
-Second, install required packages:
+Then download and install the `deb` package for Retropie based on Raspbian Stretch:
 
 ```bash
-sudo apt install libc6, libsdl2-2.0-0, libboost-system1.65.1, libboost-filesystem1.65.1, libfreeimage3, libfreetype6, libcurl4, libasound2, libpugixml1v5
+wget https://github.com/raelgc/EmulationStation/releases/download/2.7.4-light/emulationstation-2.7.4-light-arm.deb
+sudo apt install ./emulationstation-2.7.4-light-arm.deb
 ```
 
-Then download the proper binary (this is the one for Retropie based on Raspbian Stretch, check others in [Release page](https://github.com/raelgc/EmulationStation/releases/)):
+Done! Just start EmulationStation.
+
+To uninstall, just remove the package:
 
 ```bash
-wget https://github.com/raelgc/EmulationStation/releases/download/2.7.4-light/emulationstation-light-pi3-raspbian-stretch
+sudo apt remove emulationstation
 ```
-
-Make a backup of `retropie` EmulationStation:
-
-```bash
-sudo cp /opt/retropie/supplementary/emulationstation/emulationstation /opt/retropie/supplementary/emulationstation/emulationstation.retropie.bak
-```
-
-Replace with the new one:
-
-```bash
-sudo cp emulationstation-light-pi3-raspbian-stretch /opt/retropie/supplementary/emulationstation/emulationstation
-```
-
-Done! 
 
 ### Ubuntu 18.04
 
-Repeat above instructions, but using the [Ubuntu 18.04 binary](https://github.com/raelgc/EmulationStation/releases/download/2.7.4-light/emulationstation-light-amd64-ubuntu-18.04).
+Repeat above instructions, but using the [Ubuntu 18.04 package](https://github.com/raelgc/EmulationStation/releases/download/2.7.4-light/emulationstation-2.7.4-light-amd64.deb).
 
 ## Building
 
