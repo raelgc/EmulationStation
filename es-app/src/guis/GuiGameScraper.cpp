@@ -8,8 +8,8 @@
 #include "Log.h"
 #include "Settings.h"
 
-GuiGameScraper::GuiGameScraper(Window* window, ScraperSearchParams params, std::function<void(const ScraperSearchResult&)> doneFunc) : GuiComponent(window), 
-	mGrid(window, Eigen::Vector2i(1, 7)), 
+GuiGameScraper::GuiGameScraper(Window* window, ScraperSearchParams params, std::function<void(const ScraperSearchResult&)> doneFunc) : GuiComponent(window),
+	mGrid(window, Eigen::Vector2i(1, 7)),
 	mBox(window, ":/frame.png"),
 	mSearchParams(params),
 	mClose(false)
@@ -19,13 +19,13 @@ GuiGameScraper::GuiGameScraper(Window* window, ScraperSearchParams params, std::
 
 	// row 0 is a spacer
 
-	mGameName = std::make_shared<TextComponent>(mWindow, strToUpper(mSearchParams.game->getPath().filename().generic_string()), 
+	mGameName = std::make_shared<TextComponent>(mWindow, strToUpper(mSearchParams.game->getPath().filename().generic_string()),
 		Font::get(FONT_SIZE_MEDIUM), 0x777777FF, ALIGN_CENTER);
 	mGrid.setEntry(mGameName, Eigen::Vector2i(0, 1), false, true);
 
 	// row 2 is a spacer
 
-	mSystemName = std::make_shared<TextComponent>(mWindow, strToUpper(mSearchParams.system->getFullName()), Font::get(FONT_SIZE_SMALL), 
+	mSystemName = std::make_shared<TextComponent>(mWindow, strToUpper(mSearchParams.system->getFullName()), Font::get(FONT_SIZE_SMALL),
 		0x888888FF, ALIGN_CENTER);
 	mGrid.setEntry(mSystemName, Eigen::Vector2i(0, 3), false, true);
 
@@ -38,37 +38,15 @@ GuiGameScraper::GuiGameScraper(Window* window, ScraperSearchParams params, std::
 	// buttons
 	std::vector< std::shared_ptr<ButtonComponent> > buttons;
 
-	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "INPUT", "search", [&] { 
-		mSearch->openInputScreen(mSearchParams); 
-		mGrid.resetCursor(); 
+	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "INPUT", "search", [&] {
+		mSearch->openInputScreen(mSearchParams);
+		mGrid.resetCursor();
 	}));
 	buttons.push_back(std::make_shared<ButtonComponent>(mWindow, "CANCEL", "cancel", [&] { delete this; }));
 	mButtonGrid = makeButtonGrid(mWindow, buttons);
 
 	mGrid.setEntry(mButtonGrid, Eigen::Vector2i(0, 6), true, false);
 
-	// we call this->close() instead of just delete this; in the accept callback:
-	// this is because of how GuiComponent::update works.  if it was just delete this, this would happen when the metadata resolver is done:
-	//     GuiGameScraper::update()
-	//       GuiComponent::update()
-	//         it = mChildren.begin();
-	//         mBox::update()
-	//         it++;
-	//         mSearchComponent::update()
-	//           acceptCallback -> delete this
-	//         it++; // error, mChildren has been deleted because it was part of this
-
-	// so instead we do this:
-	//     GuiGameScraper::update()
-	//       GuiComponent::update()
-	//         it = mChildren.begin();
-	//         mBox::update()
-	//         it++;
-	//         mSearchComponent::update()
-	//           acceptCallback -> close() -> mClose = true
-	//         it++; // ok
-	//       if(mClose)
-	//         delete this;
 	mSearch->setAcceptCallback([this, doneFunc](const ScraperSearchResult& result) { doneFunc(result); close(); });
 	mSearch->setCancelCallback([&] { delete this; });
 

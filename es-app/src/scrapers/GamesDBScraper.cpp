@@ -54,7 +54,7 @@ const std::map<PlatformId, const char*> gamesdb_platformid_map = boost::assign::
 	(SEGA_MASTER_SYSTEM, "Sega Master System")
 	(SEGA_MEGA_DRIVE, "Sega Mega Drive")
 	(SEGA_SATURN, "Sega Saturn")
-	(SEGA_SG1000, "SEGA SG-1000")	
+	(SEGA_SG1000, "SEGA SG-1000")
 	(PLAYSTATION, "Sony Playstation")
 	(PLAYSTATION_2, "Sony Playstation 2")
 	(PLAYSTATION_3, "Sony Playstation 3")
@@ -101,11 +101,11 @@ void thegamesdb_generate_scraper_requests(const ScraperSearchParams& params, std
 		// because TheGamesDB API either sucks or I don't know how to use it properly...
 		std::string urlBase = path;
 		auto& platforms = params.system->getPlatformIds();
-		for(auto platformIt = platforms.begin(); platformIt != platforms.end(); platformIt++)
+		for(auto platformIt = platforms.cbegin(); platformIt != platforms.cend(); platformIt++)
 		{
 			path = urlBase;
 			auto mapIt = gamesdb_platformid_map.find(*platformIt);
-			if(mapIt != gamesdb_platformid_map.end())
+			if(mapIt != gamesdb_platformid_map.cend())
 			{
 				path += "&platform=";
 				path += HttpReq::urlEncode(mapIt->second);
