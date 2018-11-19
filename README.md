@@ -82,8 +82,6 @@ Install all required libraries:
 
 [FreeImage](http://downloads.sourceforge.net/freeimage/FreeImage3154Win32.zip)
 
-[FreeType2](http://download.savannah.gnu.org/releases/freetype/freetype-2.4.9.tar.bz2) (you'll need to compile)
-
 [SDL2](http://www.libsdl.org/release/SDL2-devel-2.0.3-VC.zip)
 
 [pugixml](https://pugixml.org/)

@@ -14,14 +14,23 @@ set(ES_HEADERS
     # GuiComponents
     ${CMAKE_CURRENT_SOURCE_DIR}/src/components/AsyncReqComponent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/components/RatingComponent.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/components/ScraperSearchComponent.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/components/TextListComponent.h
 
     # Guis
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiFastSelect.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiMetaDataEd.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiGameScraper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiGamelistOptions.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiMenu.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiSettings.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiScraperMulti.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiScraperStart.h
+
+    # Scrapers
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/scrapers/Scraper.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/scrapers/GamesDBScraper.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/scrapers/TheArchiveScraper.h
 
     # Views
     ${CMAKE_CURRENT_SOURCE_DIR}/src/views/gamelist/BasicGameListView.h
@@ -51,13 +60,22 @@ set(ES_SOURCES
     # GuiComponents
     ${CMAKE_CURRENT_SOURCE_DIR}/src/components/AsyncReqComponent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/components/RatingComponent.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/components/ScraperSearchComponent.cpp
 
     # Guis
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiFastSelect.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiMetaDataEd.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiGameScraper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiGamelistOptions.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiMenu.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiSettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiScraperMulti.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/guis/GuiScraperStart.cpp
+
+    # Scrapers
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/scrapers/Scraper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/scrapers/GamesDBScraper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/scrapers/TheArchiveScraper.cpp
 
     # Views
     ${CMAKE_CURRENT_SOURCE_DIR}/src/views/gamelist/BasicGameListView.cpp
