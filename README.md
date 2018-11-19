@@ -10,8 +10,6 @@ Additionally it has and a handheld mode, where config menus are hidden but sound
 
 And finally: both analogue and digital directionals will work!
 
-The builtin Scraper was removed too (it's always broken!), so you can use [the Steven Selph's Scraper scraper](https://github.com/RetroPie/RetroPie-Setup/wiki/scraper#steven-selphs-scraper) on Retropie or [Universal XML Scraper](https://github.com/Universal-Rom-Tools/Universal-XML-Scraper) on Windows.
-
 ## Usage
 
 You can use `--help` or `-h` to view a list of command-line options. Briefly outlined here:
