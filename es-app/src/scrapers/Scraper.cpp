@@ -88,7 +88,7 @@ ScraperRequest::ScraperRequest(std::vector<ScraperSearchResult>& resultsWrite) :
 
 
 // ScraperHttpRequest
-ScraperHttpRequest::ScraperHttpRequest(std::vector<ScraperSearchResult>& resultsWrite, const std::string& url) 
+ScraperHttpRequest::ScraperHttpRequest(std::vector<ScraperSearchResult>& resultsWrite, const std::string& url)
 	: ScraperRequest(resultsWrite)
 {
 	setStatus(ASYNC_IN_PROGRESS);
@@ -139,7 +139,7 @@ void MDResolveHandle::update()
 {
 	if(mStatus == ASYNC_DONE || mStatus == ASYNC_ERROR)
 		return;
-	
+
 	auto it = mFuncs.cbegin();
 	while(it != mFuncs.cend())
 	{
@@ -162,11 +162,11 @@ void MDResolveHandle::update()
 
 std::unique_ptr<ImageDownloadHandle> downloadImageAsync(const std::string& url, const std::string& saveAs)
 {
-	return std::unique_ptr<ImageDownloadHandle>(new ImageDownloadHandle(url, saveAs, 
+	return std::unique_ptr<ImageDownloadHandle>(new ImageDownloadHandle(url, saveAs,
 		Settings::getInstance()->getInt("ScraperResizeWidth"), Settings::getInstance()->getInt("ScraperResizeHeight")));
 }
 
-ImageDownloadHandle::ImageDownloadHandle(const std::string& url, const std::string& path, int maxWidth, int maxHeight) : 
+ImageDownloadHandle::ImageDownloadHandle(const std::string& url, const std::string& path, int maxWidth, int maxHeight) :
 	mSavePath(path), mMaxWidth(maxWidth), mMaxHeight(maxHeight), mReq(new HttpReq(url))
 {
 }
@@ -220,7 +220,7 @@ bool resizeImage(const std::string& path, int maxWidth, int maxHeight)
 
 	FREE_IMAGE_FORMAT format = FIF_UNKNOWN;
 	FIBITMAP* image = NULL;
-	
+
 	//detect the filetype
 	format = FreeImage_GetFileType(path.c_str(), 0);
 	if(format == FIF_UNKNOWN)
@@ -271,15 +271,9 @@ bool resizeImage(const std::string& path, int maxWidth, int maxHeight)
 
 std::string getSaveAsPath(const ScraperSearchParams& params, const std::string& suffix, const std::string& url)
 {
-	const std::string subdirectory = params.system->getName();
 	const std::string name = Utils::FileSystem::getStem(params.game->getPath()) + "-" + suffix;
-
-	std::string path = Utils::FileSystem::getHomePath() + "/.emulationstation/downloaded_images/";
-
-	if(!Utils::FileSystem::exists(path))
-		Utils::FileSystem::createDirectory(path);
-
-	path += subdirectory + "/";
+	std::string path = Utils::FileSystem::getParent(Utils::FileSystem::getStem(params.system->getGamelistPath(true)));
+	path += "/images/";
 
 	if(!Utils::FileSystem::exists(path))
 		Utils::FileSystem::createDirectory(path);
