@@ -1,6 +1,6 @@
 #include "scrapers/GamesDBScraper.h"
 #include "Log.h"
-#include "pugixml/pugixml.hpp"
+#include "pugixml.hpp"
 #include "MetaData.h"
 #include "Settings.h"
 #include "Util.h"
@@ -64,7 +64,7 @@ const std::map<PlatformId, const char*> gamesdb_platformid_map = boost::assign::
 	(ZX_SPECTRUM, "Sinclair ZX Spectrum");
 
 
-void thegamesdb_generate_scraper_requests(const ScraperSearchParams& params, std::queue< std::unique_ptr<ScraperRequest> >& requests, 
+void thegamesdb_generate_scraper_requests(const ScraperSearchParams& params, std::queue< std::unique_ptr<ScraperRequest> >& requests,
 	std::vector<ScraperSearchResult>& results)
 {
 	std::string path = "thegamesdb.net/api/GetGame.php?";
@@ -80,7 +80,7 @@ void thegamesdb_generate_scraper_requests(const ScraperSearchParams& params, std
 		// no platform specified, we're done
 		requests.push(std::unique_ptr<ScraperRequest>(new TheGamesDBRequest(results, path)));
 	}else{
-		// go through the list, we need to split this into multiple requests 
+		// go through the list, we need to split this into multiple requests
 		// because TheGamesDB API either sucks or I don't know how to use it properly...
 		std::string urlBase = path;
 		auto& platforms = params.system->getPlatformIds();
