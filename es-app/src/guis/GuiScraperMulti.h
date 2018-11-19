@@ -1,4 +1,6 @@
 #pragma once
+#ifndef ES_APP_GUIS_GUI_SCRAPER_MULTI_H
+#define ES_APP_GUIS_GUI_SCRAPER_MULTI_H
 
 #include "GuiComponent.h"
 #include "components/NinePatchComponent.h"
@@ -23,7 +25,7 @@ private:
 	void acceptResult(const ScraperSearchResult& result);
 	void skip();
 	void doNextSearch();
-	
+
 	void finish();
 
 	unsigned int mTotalGames;
@@ -41,3 +43,5 @@ private:
 	std::shared_ptr<ScraperSearchComponent> mSearchComp;
 	std::shared_ptr<ComponentGrid> mButtonGrid;
 };
+
+#endif // ES_APP_GUIS_GUI_SCRAPER_MULTI_H

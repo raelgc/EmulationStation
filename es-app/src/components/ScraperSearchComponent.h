@@ -1,4 +1,6 @@
 #pragma once
+#ifndef ES_APP_COMPONENTS_SCRAPER_SEARCH_COMPONENT_H
+#define ES_APP_COMPONENTS_SCRAPER_SEARCH_COMPONENT_H
 
 #include "GuiComponent.h"
 #include "scrapers/Scraper.h"
@@ -41,7 +43,7 @@ public:
 	void update(int deltaTime) override;
 	void render(const Eigen::Affine3f& parentTrans) override;
 	std::vector<HelpPrompt> getHelpPrompts() override;
-	void onSizeChanged() override;	
+	void onSizeChanged() override;
 	void onFocusGained() override;
 	void onFocusLost() override;
 
@@ -85,7 +87,7 @@ private:
 
 		MetaDataPair(const std::shared_ptr<TextComponent>& f, const std::shared_ptr<GuiComponent>& s, bool r = true) : first(f), second(s), resize(r) {};
 	};
-	
+
 	std::vector<MetaDataPair> mMD_Pairs;
 
 	SearchType mSearchType;
@@ -102,3 +104,5 @@ private:
 
 	BusyComponent mBusyAnim;
 };
+
+#endif // ES_APP_COMPONENTS_SCRAPER_SEARCH_COMPONENT_H
