@@ -10,7 +10,6 @@
 #include <string>
 #include <boost/filesystem.hpp>
 #include <boost/variant.hpp>
-#include <boost/xpressive/xpressive.hpp>
 #include <Eigen/Dense>
 #include <pugixml.hpp>
 #include "GuiComponent.h"
