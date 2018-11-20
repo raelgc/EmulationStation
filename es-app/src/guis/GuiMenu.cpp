@@ -69,6 +69,11 @@ void GuiMenu::openScraperSettings()
 	scrape_ratings->setState(Settings::getInstance()->getBool("ScrapeRatings"));
 	s->addWithLabel("SCRAPE RATINGS", scrape_ratings);
 	s->addSaveFunc([scrape_ratings] { Settings::getInstance()->setBool("ScrapeRatings", scrape_ratings->getState()); });
+	// save scrape image to gamelist or ES folder
+	auto save_to_gamelist = std::make_shared<SwitchComponent>(mWindow);
+	save_to_gamelist->setState(Settings::getInstance()->getBool("ScraperSaveImageToGamelist"));
+	s->addWithLabel("SAVE IMAGES LOCALLY", save_to_gamelist);
+	s->addSaveFunc([save_to_gamelist] { Settings::getInstance()->setBool("ScraperSaveImageToGamelist", save_to_gamelist->getState()); });
 	// scrape now
 	ComponentListRow row;
 	auto openScrapeNow = [this] { mWindow->pushGui(new GuiScraperStart(mWindow)); };
