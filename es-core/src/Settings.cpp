@@ -81,6 +81,7 @@ void Settings::setDefaults()
 	mIntMap["ScreenSaverTime"] = 5*60*1000; // 5 minutes
 	mIntMap["ScraperResizeWidth"] = 400;
 	mIntMap["ScraperResizeHeight"] = 0;
+	mBoolMap["ScraperSaveImageToGamelist"] = false;
 	#ifdef _RPI_
 		mIntMap["MaxVRAM"] = 80;
 	#else

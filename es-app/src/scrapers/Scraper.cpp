@@ -271,9 +271,20 @@ bool resizeImage(const std::string& path, int maxWidth, int maxHeight)
 
 std::string getSaveAsPath(const ScraperSearchParams& params, const std::string& suffix, const std::string& url)
 {
+	std::string path;
 	const std::string name = Utils::FileSystem::getStem(params.game->getPath()) + "-" + suffix;
-	std::string path = Utils::FileSystem::getParent(Utils::FileSystem::getStem(params.system->getGamelistPath(true)));
-	path += "/images/";
+
+	if(Settings::getInstance()->getBool("ScraperSaveImageToGamelist"))
+	{
+		path = Utils::FileSystem::getParent(Utils::FileSystem::getStem(params.system->getGamelistPath(true)));
+		path += "/images/";
+	} else {
+		const std::string subdirectory = params.system->getName();
+		path = Utils::FileSystem::getHomePath() + "/.emulationstation/downloaded_images/";
+		if(!Utils::FileSystem::exists(path))
+			Utils::FileSystem::createDirectory(path);
+		path += subdirectory + "/";
+	}
 
 	if(!Utils::FileSystem::exists(path))
 		Utils::FileSystem::createDirectory(path);
