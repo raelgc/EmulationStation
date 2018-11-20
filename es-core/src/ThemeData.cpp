@@ -6,7 +6,6 @@
 #include "Log.h"
 #include "Settings.h"
 #include <pugixml.hpp>
-#include <boost/assign.hpp>
 #include <boost/xpressive/xpressive.hpp>
 
 #include "components/ImageComponent.h"
@@ -247,8 +246,8 @@ void ThemeData::parseIncludes(const pugi::xml_node& root)
 
 	for(pugi::xml_node node = root.child("include"); node; node = node.next_sibling("include"))
 	{
-		const char* relPath = node.text().get();
-		std::string path = resolvePath(relPath, mPaths.back());
+		std::string relPath = resolvePlaceholders(node.text().as_string());
+		std::string path = resolvePath(relPath.c_str(), mPaths.back());
 		if(!ResourceManager::getInstance()->fileExists(path))
 			throw error << "Included file \"" << relPath << "\" not found! (resolved to \"" << path << "\")";
 

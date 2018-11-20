@@ -6,7 +6,6 @@
 #include "components/ImageComponent.h"
 #include "components/TextComponent.h"
 #include "components/ComponentGrid.h"
-#include <boost/assign.hpp>
 
 #define OFFSET_X 12 // move the entire thing right by this amount (px)
 #define OFFSET_Y 12 // move the entire thing up by this amount (px)
