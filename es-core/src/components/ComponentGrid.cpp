@@ -374,7 +374,7 @@ void ComponentGrid::render(const Eigen::Affine3f& parentTrans)
 		glVertexPointer(2, GL_FLOAT, 0, &mLines[0].x);
 		glColorPointer(4, GL_UNSIGNED_BYTE, 0, mLineColors.data());
 
-		glDrawArrays(GL_LINES, 0, mLines.size());
+		glDrawArrays(GL_LINES, 0, (GLsizei)mLines.size());
 
 		glDisable(GL_BLEND);
 		glDisableClientState(GL_VERTEX_ARRAY);
