@@ -138,6 +138,8 @@ public:
 
 private:
 	static std::map< std::string, std::map<std::string, ElementPropertyType> > sElementMap;
+	static std::vector<std::string> sSupportedFeatures;
+	static std::vector<std::string> sSupportedViews;
 
 	std::deque<boost::filesystem::path> mPaths;
 	float mVersion;

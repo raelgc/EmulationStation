@@ -13,15 +13,13 @@
 
 class TextCache;
 
-#define FONT_SIZE_MINI ((unsigned int)(0.030f * std::min(Renderer::getScreenHeight(), Renderer::getScreenWidth())))
-#define FONT_SIZE_SMALL ((unsigned int)(0.035f * std::min(Renderer::getScreenHeight(), Renderer::getScreenWidth())))
-#define FONT_SIZE_MEDIUM ((unsigned int)(0.045f * std::min(Renderer::getScreenHeight(), Renderer::getScreenWidth())))
-#define FONT_SIZE_LARGE ((unsigned int)(0.085f * std::min(Renderer::getScreenHeight(), Renderer::getScreenWidth())))
+#define FONT_SIZE_MINI ((unsigned int)(0.030f * std::min((int)Renderer::getScreenHeight(), (int)Renderer::getScreenWidth())))
+#define FONT_SIZE_SMALL ((unsigned int)(0.035f * std::min((int)Renderer::getScreenHeight(), (int)Renderer::getScreenWidth())))
+#define FONT_SIZE_MEDIUM ((unsigned int)(0.045f * std::min((int)Renderer::getScreenHeight(), (int)Renderer::getScreenWidth())))
+#define FONT_SIZE_LARGE ((unsigned int)(0.085f * std::min((int)Renderer::getScreenHeight(), (int)Renderer::getScreenWidth())))
 
 #define FONT_PATH_LIGHT ":/opensans_hebrew_condensed_light.ttf"
 #define FONT_PATH_REGULAR ":/opensans_hebrew_condensed_regular.ttf"
-
-typedef unsigned long UnicodeChar;
 
 enum Alignment
 {
@@ -72,7 +70,7 @@ public:
 	static size_t getNextCursor(const std::string& str, size_t cursor);
 	static size_t getPrevCursor(const std::string& str, size_t cursor);
 	static size_t moveCursor(const std::string& str, size_t cursor, int moveAmt); // negative moveAmt = move backwards, positive = move forwards
-	static UnicodeChar readUnicodeChar(const std::string& str, size_t& cursor); // reads unicode character at cursor AND moves cursor to the next valid unicode char
+	static unsigned int readUnicodeChar(const std::string& str, size_t& cursor); // reads unicode character at cursor AND moves cursor to the next valid unicode char
 
 private:
 	static FT_Library sLibrary;
@@ -114,7 +112,7 @@ private:
 	void getTextureForNewGlyph(const Eigen::Vector2i& glyphSize, FontTexture*& tex_out, Eigen::Vector2i& cursor_out);
 
 	std::map< unsigned int, std::unique_ptr<FontFace> > mFaceCache;
-	FT_Face getFaceForChar(UnicodeChar id);
+	FT_Face getFaceForChar(unsigned int id);
 	void clearFaceCache();
 
 	struct Glyph
@@ -128,9 +126,9 @@ private:
 		Eigen::Vector2f bearing;
 	};
 
-	std::map<UnicodeChar, Glyph> mGlyphMap;
+	std::map<unsigned int, Glyph> mGlyphMap;
 
-	Glyph* getGlyph(UnicodeChar id);
+	Glyph* getGlyph(unsigned int id);
 
 	int mMaxGlyphHeight;
 

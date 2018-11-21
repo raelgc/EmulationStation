@@ -6,10 +6,12 @@
 #include "Log.h"
 #include "Settings.h"
 #include <pugixml.hpp>
-#include <boost/xpressive/xpressive.hpp>
 
 #include "components/ImageComponent.h"
 #include "components/TextComponent.h"
+
+std::vector<std::string> ThemeData::sSupportedViews { { "system" }, { "basic" }, { "detailed" } };
+std::vector<std::string> ThemeData::sSupportedFeatures { { "carousel" }, { "z-index" } };
 
 std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> ThemeData::sElementMap {
 	{ "image", {
@@ -176,24 +178,24 @@ std::string resolvePath(const char* in, const fs::path& relative)
 
 std::map<std::string, std::string> mVariables;
 
-std::string &format_variables(const boost::xpressive::smatch &what)
-{
-	return mVariables[what[1].str()];
-}
-
 std::string resolvePlaceholders(const char* in)
 {
-	if(!in || in[0] == '\0')
-		return std::string(in);
-
 	std::string inStr(in);
 
-	using namespace boost::xpressive;
-	sregex rex = "${" >> (s1 = +('.' | _w)) >> '}';
+	if(inStr.empty())
+		return inStr;
 
-	std::string output = regex_replace(inStr, rex, format_variables);
+	const size_t variableBegin = inStr.find("${");
+	const size_t variableEnd   = inStr.find("}", variableBegin);
 
-	return output;
+	if((variableBegin == std::string::npos) || (variableEnd == std::string::npos))
+		return inStr;
+
+	std::string prefix  = inStr.substr(0, variableBegin);
+	std::string replace = inStr.substr(variableBegin + 2, variableEnd - (variableBegin + 2));
+	std::string suffix  = resolvePlaceholders(inStr.substr(variableEnd + 1).c_str());
+
+	return prefix + mVariables[replace] + suffix;
 }
 
 ThemeData::ThemeData()
@@ -237,6 +239,7 @@ void ThemeData::loadFile(std::map<std::string, std::string> sysDataMap, const st
 	parseVariables(root);
 	parseIncludes(root);
 	parseViews(root);
+	parseFeatures(root);
 }
 
 void ThemeData::parseIncludes(const pugi::xml_node& root)
@@ -285,7 +288,7 @@ void ThemeData::parseFeatures(const pugi::xml_node& root)
 
 		const std::string supportedAttr = node.attribute("supported").as_string();
 
-		if (supportedAttr == "carousel" || supportedAttr == "z-index")
+		if(std::find(sSupportedFeatures.cbegin(), sSupportedFeatures.cend(), supportedAttr) != sSupportedFeatures.cend())
 		{
 			parseViews(node);
 		}
@@ -334,8 +337,11 @@ void ThemeData::parseViews(const pugi::xml_node& root)
 			prevOff = nameAttr.find_first_not_of(delim, off);
 			off = nameAttr.find_first_of(delim, prevOff);
 
-			ThemeView& view = mViews.insert(std::pair<std::string, ThemeView>(viewKey, ThemeView())).first->second;
-			parseView(node, view);
+			if (std::find(sSupportedViews.cbegin(), sSupportedViews.cend(), viewKey) != sSupportedViews.cend())
+			{
+				ThemeView& view = mViews.insert(std::pair<std::string, ThemeView>(viewKey, ThemeView())).first->second;
+				parseView(node, view);
+			}
 		}
 	}
 }
