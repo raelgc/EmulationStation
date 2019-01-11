@@ -46,4 +46,6 @@ std::string removeParenthesis(const std::string& str);
 
 const bool any_of(const std::vector<std::string> list, const std::string& element);
 
+std::string scramble (const std::string& _input, const std::string& key);
+
 #endif // ES_CORE_UTIL_H
