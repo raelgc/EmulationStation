@@ -58,6 +58,7 @@ find_package(Eigen3 REQUIRED)
 find_package(CURL REQUIRED)
 find_package(CURL REQUIRED)
 find_package(PugiXML REQUIRED)
+find_package(RapidJSON REQUIRED)
 
 #add ALSA for Linux
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -115,6 +116,11 @@ set(COMMON_INCLUDE_DIRS
     ${Boost_INCLUDE_DIRS}
     ${EIGEN3_INCLUDE_DIR}
     ${CURL_INCLUDE_DIR}
+<<<<<<< HEAD
+=======
+    ${VLC_INCLUDE_DIR}
+    ${RAPIDJSON_INCLUDE_DIRS}
+>>>>>>> 44395f5... Adding new scraper GamesDBJSONScraper. The scraper uses the new GamesDb JSON API.
     ${CMAKE_CURRENT_SOURCE_DIR}/external
     ${CMAKE_CURRENT_SOURCE_DIR}/es-core/src
 )

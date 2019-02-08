@@ -1,5 +1,5 @@
 #include "scrapers/Scraper.h"
-#include "scrapers/GamesDBScraper.h"
+#include "scrapers/GamesDBJSONScraper.h"
 #include "scrapers/ScreenScraper.h"
 #include "Log.h"
 #include "Settings.h"
@@ -7,7 +7,7 @@
 #include <boost/filesystem.hpp>
 
 const std::map<std::string, generate_scraper_requests_func> scraper_request_funcs = {
-	//{ "TheGamesDB", &thegamesdb_generate_scraper_requests },
+	{ "TheGamesDB", &thegamesdb_generate_json_scraper_requests },
 	{ "ScreenScraper", &screenscraper_generate_scraper_requests }
 };
 
