@@ -1,6 +1,6 @@
-# EmulationStation Light
+# EmulationStation Arcade (aka Light version)
 
-This is lightweight version of [Retropie EmulationStation](https://github.com/RetroPie/EmulationStation).
+This is light version of [Retropie EmulationStation](https://github.com/RetroPie/EmulationStation).
 
 It has some of the modern Retropie features - like carousel themes, themes with variables (like [SNES mini](https://github.com/ruckage/es-theme-snes-mini)) - but using less resources than Retropie version (usually at least 1/3 of RAM usage, close to original ES), but no support for video, random, favorites or custom collections.
 
