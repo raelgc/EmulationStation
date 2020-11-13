@@ -2,7 +2,7 @@
 
 #include <SDL_events.h>
 #ifdef WIN32
-#include <codecvt>
+#include <windows.h>
 #else
 #include <unistd.h>
 #endif
@@ -30,14 +30,24 @@ int runRestartCommand()
 
 int runSystemCommand(const std::string& cmd_utf8)
 {
-#ifdef WIN32
-	// on Windows we use _wsystem to support non-ASCII paths
-	// which requires converting from utf8 to a wstring
-	typedef std::codecvt_utf8<wchar_t> convert_type;
-	std::wstring_convert<convert_type, wchar_t> converter;
-	std::wstring wchar_str = converter.from_bytes(cmd_utf8);
-	return _wsystem(wchar_str.c_str());
-#else
+#ifdef WIN32 // windows
+	SHELLEXECUTEINFO ShExecInfo = {0};
+	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
+	ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+	ShExecInfo.hwnd = NULL;
+	ShExecInfo.lpVerb = NULL;
+	ShExecInfo.lpFile = cmd_utf8.c_str();        
+	ShExecInfo.lpParameters = "";   
+	ShExecInfo.lpDirectory = NULL;
+	ShExecInfo.nShow = SW_SHOW;
+	ShExecInfo.hInstApp = NULL; 
+	ShellExecuteEx(&ShExecInfo);
+	WaitForSingleObject(ShExecInfo.hProcess, INFINITE);
+	CloseHandle(ShExecInfo.hProcess);
+	DWORD dwExitCode = 0;
+	GetExitCodeProcess(ShExecInfo.hProcess, &dwExitCode);
+	return dwExitCode;
+#else // osx / linux
 	return system(cmd_utf8.c_str());
 #endif
 }
