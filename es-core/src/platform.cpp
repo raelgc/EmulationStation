@@ -3,6 +3,8 @@
 #include <SDL_events.h>
 #ifdef WIN32
 #include <windows.h>
+#include "Shlwapi.h"
+#pragma comment(lib, "Shlwapi.lib")
 #else
 #include <unistd.h>
 #endif
@@ -30,14 +32,16 @@ int runRestartCommand()
 
 int runSystemCommand(const std::string& cmd_utf8)
 {
-#ifdef WIN32 // windows
+#ifdef WIN32
+	std::string args = std::string(PathGetArgs(cmd_utf8.c_str()));
+	std::string program = cmd_utf8.substr(0, cmd_utf8.length() - args.length());
 	SHELLEXECUTEINFO ShExecInfo = {0};
 	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
 	ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
 	ShExecInfo.hwnd = NULL;
 	ShExecInfo.lpVerb = NULL;
-	ShExecInfo.lpFile = cmd_utf8.c_str();        
-	ShExecInfo.lpParameters = "";   
+	ShExecInfo.lpFile = program.c_str();        
+	ShExecInfo.lpParameters = args.c_str();   
 	ShExecInfo.lpDirectory = NULL;
 	ShExecInfo.nShow = SW_SHOW;
 	ShExecInfo.hInstApp = NULL; 
@@ -47,7 +51,7 @@ int runSystemCommand(const std::string& cmd_utf8)
 	DWORD dwExitCode = 0;
 	GetExitCodeProcess(ShExecInfo.hProcess, &dwExitCode);
 	return dwExitCode;
-#else // osx / linux
+#else
 	return system(cmd_utf8.c_str());
 #endif
 }
